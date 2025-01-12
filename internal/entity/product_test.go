@@ -19,6 +19,15 @@ func TestProduct_New(t *testing.T) {
 		assert.True(t, p.Available)
 	})
 
+	t.Run("should return display price", func(t *testing.T) {
+		categoryID := id.New()
+		p, _ := NewProduct("Product Name", "Product Description", "http://test.com", 19.65, true, categoryID)
+		assert.Equal(t, 1965, p.Price)
+
+		displayPrice := p.DisplayPrice()
+		assert.Equal(t, "19.65", displayPrice)
+	})
+
 	tests := []struct {
 		name           string
 		description    string

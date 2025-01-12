@@ -1,6 +1,9 @@
 package entity
 
 import (
+	"fmt"
+	"math"
+
 	"github.com/Marlliton/speisekarte/pkg/id"
 	"github.com/Marlliton/validator"
 	"github.com/Marlliton/validator/rule"
@@ -41,12 +44,16 @@ func NewProduct[T Numeric](
 	return p, nil
 }
 
+func (p *Product) DisplayPrice() string {
+	return fmt.Sprintf("%.2f", float64(p.Price)/100)
+}
+
 func convertToCents[T Numeric](value T) int {
 	switch v := any(value).(type) {
 	case int:
 		return v * 100
 	case float64:
-		return int(v) * 100
+		return int(math.Round(v * 100))
 	default:
 		return -1
 	}
