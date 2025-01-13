@@ -17,6 +17,7 @@ func TestProduct_New(t *testing.T) {
 		assert.NotNil(t, p.ImageURL)
 		assert.NotNil(t, p.Price)
 		assert.True(t, p.Available)
+		assert.Equal(t, 1965, p.Price)
 	})
 
 	t.Run("should return display price", func(t *testing.T) {
