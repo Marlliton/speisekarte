@@ -1,6 +1,8 @@
 package menu
 
 import (
+	"time"
+
 	"github.com/Marlliton/speisekarte/pkg/id"
 	"github.com/Marlliton/validator"
 	"github.com/Marlliton/validator/rule"
@@ -10,6 +12,8 @@ import (
 type Menu struct {
 	ID         id.ID
 	Name       string
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 	Categories []id.ID
 }
 
@@ -17,6 +21,7 @@ func New(name string, categories ...id.ID) (*Menu, []*validator_error.ValidatorE
 	m := &Menu{
 		ID:         id.New(),
 		Name:       name,
+		CreatedAt:  time.Now(),
 		Categories: categories,
 	}
 

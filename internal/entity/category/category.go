@@ -1,6 +1,8 @@
 package category
 
 import (
+	"time"
+
 	"github.com/Marlliton/speisekarte/pkg/id"
 	"github.com/Marlliton/validator"
 	"github.com/Marlliton/validator/rule"
@@ -8,12 +10,14 @@ import (
 )
 
 type Category struct {
-	ID   id.ID
-	Name string
+	ID        id.ID
+	Name      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 func New(name string) (*Category, []*validator_error.ValidatorError) {
-	c := &Category{ID: id.New(), Name: name}
+	c := &Category{ID: id.New(), Name: name, CreatedAt: time.Now()}
 
 	ok, errs := c.validate()
 	if !ok {

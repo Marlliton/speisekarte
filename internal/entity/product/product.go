@@ -3,6 +3,7 @@ package product
 import (
 	"fmt"
 	"math"
+	"time"
 
 	"github.com/Marlliton/speisekarte/pkg/id"
 	"github.com/Marlliton/validator"
@@ -17,9 +18,11 @@ type Product struct {
 	ImageURL    string
 	Price       int
 	Available   bool
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 	CategoryID  id.ID
 
-	// TODO: Adicionar AddOns para adicionais e Note para observação do pedido.
+	// TODO: Adicionar "AddOns" para adicionais e "Note" para observação do pedido.
 }
 
 type Numeric interface{ int | float64 }
@@ -35,6 +38,7 @@ func New[T Numeric](
 		ImageURL:    imageURL,
 		Price:       priceInCents,
 		Available:   available,
+		CreatedAt:   time.Now(),
 		CategoryID:  categoryID,
 	}
 
