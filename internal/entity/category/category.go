@@ -1,4 +1,4 @@
-package entity
+package category
 
 import (
 	"github.com/Marlliton/speisekarte/pkg/id"
