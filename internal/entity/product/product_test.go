@@ -30,7 +30,7 @@ func TestProduct_New(t *testing.T) {
 	})
 }
 
-func TestProduct_Fail(t *testing.T) {
+func TestProduct_FailToCreate(t *testing.T) {
 	tests := []struct {
 		name           string
 		description    string
