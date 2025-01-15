@@ -28,7 +28,9 @@ func TestProduct_New(t *testing.T) {
 		displayPrice := p.DisplayPrice()
 		assert.Equal(t, "19.65", displayPrice)
 	})
+}
 
+func TestProduct_Fail(t *testing.T) {
 	tests := []struct {
 		name           string
 		description    string
