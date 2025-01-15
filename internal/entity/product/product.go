@@ -18,6 +18,8 @@ type Product struct {
 	Price       int
 	Available   bool
 	CategoryID  id.ID
+
+	// TODO: Adicionar AddOns para adicionais e Note para observação do pedido.
 }
 
 type Numeric interface{ int | float64 }
