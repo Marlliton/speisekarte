@@ -7,8 +7,8 @@ import (
 
 	"github.com/Marlliton/speisekarte/pkg/id"
 	"github.com/Marlliton/validator"
+	"github.com/Marlliton/validator/fail"
 	"github.com/Marlliton/validator/rule"
-	"github.com/Marlliton/validator/validator_error"
 )
 
 type Product struct {
@@ -29,7 +29,7 @@ type Numeric interface{ int | float64 }
 
 func New[T Numeric](
 	name, description, imageURL string, price T, available bool, categoryID id.ID,
-) (*Product, []*validator_error.ValidatorError) {
+) (*Product, []*fail.Error) {
 	priceInCents := convertToCents(price)
 	p := &Product{
 		ID:          id.New(),
@@ -65,7 +65,7 @@ func convertToCents[T Numeric](value T) int {
 	}
 }
 
-func (p *Product) validate() (bool, []*validator_error.ValidatorError) {
+func (p *Product) validate() (bool, []*fail.Error) {
 	v := validator.New()
 	v.Add("ID", rule.Rules{
 		rule.Required(),

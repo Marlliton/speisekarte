@@ -5,8 +5,8 @@ import (
 
 	"github.com/Marlliton/speisekarte/pkg/id"
 	"github.com/Marlliton/validator"
+	"github.com/Marlliton/validator/fail"
 	"github.com/Marlliton/validator/rule"
-	"github.com/Marlliton/validator/validator_error"
 )
 
 type Menu struct {
@@ -17,7 +17,7 @@ type Menu struct {
 	Categories []id.ID
 }
 
-func New(name string, categories ...id.ID) (*Menu, []*validator_error.ValidatorError) {
+func New(name string, categories ...id.ID) (*Menu, []*fail.Error) {
 	m := &Menu{
 		ID:         id.New(),
 		Name:       name,
@@ -33,7 +33,7 @@ func New(name string, categories ...id.ID) (*Menu, []*validator_error.ValidatorE
 	return m, nil
 }
 
-func (m *Menu) validate() (bool, []*validator_error.ValidatorError) {
+func (m *Menu) validate() (bool, []*fail.Error) {
 	v := validator.New()
 	v.Add("ID", rule.Rules{rule.Required()})
 	v.Add("Name", rule.Rules{rule.Required(), rule.MinLength(3), rule.MaxLength(30)})

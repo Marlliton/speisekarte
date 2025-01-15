@@ -5,8 +5,8 @@ import (
 
 	"github.com/Marlliton/speisekarte/pkg/id"
 	"github.com/Marlliton/validator"
+	"github.com/Marlliton/validator/fail"
 	"github.com/Marlliton/validator/rule"
-	"github.com/Marlliton/validator/validator_error"
 )
 
 type Category struct {
@@ -16,7 +16,7 @@ type Category struct {
 	UpdatedAt time.Time
 }
 
-func New(name string) (*Category, []*validator_error.ValidatorError) {
+func New(name string) (*Category, []*fail.Error) {
 	c := &Category{ID: id.New(), Name: name, CreatedAt: time.Now()}
 
 	ok, errs := c.validate()
@@ -27,7 +27,7 @@ func New(name string) (*Category, []*validator_error.ValidatorError) {
 	return c, nil
 }
 
-func (c *Category) validate() (bool, []*validator_error.ValidatorError) {
+func (c *Category) validate() (bool, []*fail.Error) {
 	v := validator.New()
 	v.Add("ID", rule.Rules{rule.Required()})
 	v.Add("Name", rule.Rules{rule.Required(), rule.MinLength(3), rule.MaxLength(30)})
