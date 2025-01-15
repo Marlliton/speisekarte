@@ -10,7 +10,7 @@ import (
 func TestProduct_New(t *testing.T) {
 	t.Run("should create a valid product", func(t *testing.T) {
 		categoryID := id.New()
-		p, errs := NewProduct("Product Name", "Product Description", "http://test.com", 19.65, true, categoryID)
+		p, errs := New("Product Name", "Product Description", "http://test.com", 19.65, true, categoryID)
 		assert.Nil(t, errs)
 		assert.NotNil(t, p.Name)
 		assert.NotNil(t, p.Description)
@@ -22,7 +22,7 @@ func TestProduct_New(t *testing.T) {
 
 	t.Run("should return display price", func(t *testing.T) {
 		categoryID := id.New()
-		p, _ := NewProduct("Product Name", "Product Description", "http://test.com", 19.65, true, categoryID)
+		p, _ := New("Product Name", "Product Description", "http://test.com", 19.65, true, categoryID)
 		assert.Equal(t, 1965, p.Price)
 
 		displayPrice := p.DisplayPrice()
@@ -95,7 +95,7 @@ func TestProduct_Fail(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.label, func(t *testing.T) {
-			_, errs := NewProduct(tc.name, tc.description, tc.imageURL, tc.price, tc.available, tc.categoryID)
+			_, errs := New(tc.name, tc.description, tc.imageURL, tc.price, tc.available, tc.categoryID)
 			assert.NotNil(t, errs)
 			assert.Len(t, errs, tc.expectedErrLen)
 		})

@@ -12,7 +12,7 @@ type Category struct {
 	Name string
 }
 
-func NewCategory(name string) (*Category, []*validator_error.ValidatorError) {
+func New(name string) (*Category, []*validator_error.ValidatorError) {
 	c := &Category{ID: id.New(), Name: name}
 
 	ok, errs := c.validate()

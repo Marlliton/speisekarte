@@ -22,7 +22,7 @@ type Product struct {
 
 type Numeric interface{ int | float64 }
 
-func NewProduct[T Numeric](
+func New[T Numeric](
 	name, description, imageURL string, price T, available bool, categoryID id.ID,
 ) (*Product, []*validator_error.ValidatorError) {
 	priceInCents := convertToCents(price)

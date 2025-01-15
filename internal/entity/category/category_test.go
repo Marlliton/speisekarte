@@ -36,7 +36,7 @@ func TestCategory_Validations(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			c, errs := NewCategory(tc.categoryName)
+			c, errs := New(tc.categoryName)
 
 			if !tc.expectedErrs {
 				assert.Nil(t, errs)
