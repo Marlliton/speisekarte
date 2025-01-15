@@ -3,7 +3,7 @@ module github.com/Marlliton/speisekarte
 go 1.23.4
 
 require (
-	github.com/Marlliton/validator v1.0.6
+	github.com/Marlliton/validator v1.0.66
 	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.10.0
 )
