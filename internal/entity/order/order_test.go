@@ -22,6 +22,7 @@ func createOrderItem(t *testing.T, orderID, prodID id.ID, qtdy, price int) *Orde
 	t.Helper()
 	oItem, errs := NewOrderItem(orderID, prodID, qtdy, price)
 	assert.Nil(t, errs)
+	assert.NotNil(t, oItem)
 
 	return oItem
 }
@@ -54,5 +55,17 @@ func TestOrder_AddItem(t *testing.T) {
 
 		assert.Equal(t, 1, len(order.Items))
 		assert.Equal(t, 4, order.Items[0].Quantity)
+	})
+
+	t.Run("add others itens", func(t *testing.T) {
+		item2 := createOrderItem(t, order.ID, id.New(), 2, p.Price)
+		item3 := createOrderItem(t, order.ID, id.New(), 3, p.Price)
+
+		order.AddItem(item2)
+		order.AddItem(item3)
+		assert.Equal(t, 3, len(order.Items))
+		assert.Equal(t, item.ID, order.Items[0].ID)
+		assert.Equal(t, item2.ID, order.Items[1].ID)
+		assert.Equal(t, item3.ID, order.Items[2].ID)
 	})
 }

@@ -25,9 +25,9 @@ type Product struct {
 	// TODO: Adicionar "AddOns" para adicionais e "Note" para observação do pedido.
 }
 
-type Numeric interface{ int | float64 }
+type numeric interface{ int | float64 }
 
-func New[T Numeric](
+func New[T numeric](
 	name, description, imageURL string, price T, available bool, categoryID id.ID,
 ) (*Product, []*fail.Error) {
 	priceInCents := convertToCents(price)
@@ -54,7 +54,7 @@ func (p *Product) DisplayPrice() string {
 	return fmt.Sprintf("%.2f", float64(p.Price)/100)
 }
 
-func convertToCents[T Numeric](value T) int {
+func convertToCents[T numeric](value T) int {
 	switch v := any(value).(type) {
 	case int:
 		return v * 100
