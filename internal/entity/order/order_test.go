@@ -67,5 +67,7 @@ func TestOrder_AddItem(t *testing.T) {
 		assert.Equal(t, item.ID, order.Items[0].ID)
 		assert.Equal(t, item2.ID, order.Items[1].ID)
 		assert.Equal(t, item3.ID, order.Items[2].ID)
+		assert.Equal(t, 2, order.Items[1].Quantity)
+		assert.Equal(t, 3, order.Items[2].Quantity)
 	})
 }
