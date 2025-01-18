@@ -1,8 +1,6 @@
 package order
 
 import (
-	"fmt"
-	"log"
 	"time"
 
 	"github.com/Marlliton/speisekarte/pkg/id"
@@ -25,14 +23,12 @@ type Order struct {
 	CustomerID id.ID
 	Items      []*OrderItem
 	Status     OrderStatus
+	Total      int
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
 
 func New(customerID id.ID, items ...*OrderItem) (*Order, []*fail.Error) {
-	if items == nil {
-		items = []*OrderItem{}
-	}
 	o := &Order{
 		ID:         id.New(),
 		CustomerID: customerID,
@@ -48,22 +44,10 @@ func New(customerID id.ID, items ...*OrderItem) (*Order, []*fail.Error) {
 	return o, nil
 }
 
-func (o *Order) Total() float64 {
-	total := 0.0
-	for _, item := range o.Items {
-		log.Println("aaaaaaaaaaaaaa", item.Quantity)
-		total += float64(item.Price) * float64(item.Quantity)
-	}
-	return total / 100
-}
-
-func (o *Order) DisplayTotalPrice() string {
-	return fmt.Sprintf("%.2f", o.Total())
-}
-
 func (o *Order) validate() (bool, []*fail.Error) {
 	v := validator.New()
 	v.Add("CustomerID", rule.Rules{rule.Required()})
+	v.Add("Items", rule.Rules{rule.MinLength(1)})
 	v.Add("Status", rule.Rules{rule.Required()})
 
 	if errs := v.Validate(*o); len(errs) > 0 {
@@ -71,16 +55,4 @@ func (o *Order) validate() (bool, []*fail.Error) {
 	}
 
 	return true, nil
-}
-
-func (o *Order) AddItem(item *OrderItem) {
-	for i, it := range o.Items {
-		if it.ProductID == item.ProductID {
-			o.Items[i].Quantity = item.Quantity
-			return
-		}
-	}
-
-	o.Items = append(o.Items, item)
-	o.UpdatedAt = time.Now()
 }
