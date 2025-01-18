@@ -27,13 +27,6 @@ type Cart struct {
 	UpdatedAt   time.Time
 }
 
-type CartItem struct {
-	ID        id.ID
-	ProductID id.ID
-	Price     int
-	Quantity  int
-}
-
 func New(customerID id.ID, deliveryFee, discount int, items ...*CartItem) (*Cart, []*fail.Error) {
 	c := &Cart{
 		ID:          id.New(),
