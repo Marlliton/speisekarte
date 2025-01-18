@@ -77,7 +77,7 @@ func (p *Product) validate() (bool, []*fail.Error) {
 	})
 	v.Add("Description", rule.Rules{
 		rule.Required(),
-		rule.MinLength(15),
+		rule.MinLength(5),
 		rule.MaxLength(300),
 	})
 	v.Add("ImageURL", rule.Rules{

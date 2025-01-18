@@ -71,3 +71,32 @@ func TestOrder_AddItem(t *testing.T) {
 		assert.Equal(t, 3, order.Items[2].Quantity)
 	})
 }
+
+func TestOrder_Total(t *testing.T) {
+	order, _ := createOrder(t)
+	assert.NotNil(t, order)
+	p, _ := product.New("eggs", "fried eggs whith coke", "http://test.com", 10.0, true, id.New())
+	p2, _ := product.New("koke", "coke with ice", "http://test.com", 10.0, true, id.New())
+	assert.NotNil(t, p)
+	item := createOrderItem(t, order.ID, p.ID, 1, p.Price)
+	item2 := createOrderItem(t, order.ID, p2.ID, 3, p.Price)
+	order.AddItem(item)
+
+	t.Run("get the total price order", func(t *testing.T) {
+		assert.Equal(t, 1, len(order.Items))
+		assert.Equal(t, 1, order.Items[0].Quantity)
+		assert.Equal(t, 10.00, order.Total())
+	})
+
+	t.Run("get the total price order whith thow itens", func(t *testing.T) {
+		order.AddItem(item2)
+		assert.Equal(t, 2, len(order.Items))
+		assert.Equal(t, 1, order.Items[0].Quantity)
+		assert.Equal(t, 3, order.Items[1].Quantity)
+		assert.Equal(t, 40.00, order.Total())
+	})
+
+	t.Run("get the display total price", func(t *testing.T) {
+		assert.Equal(t, "40.00", order.DisplayTotalPrice())
+	})
+}

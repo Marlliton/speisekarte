@@ -1,6 +1,8 @@
 package order
 
 import (
+	"fmt"
+	"log"
 	"time"
 
 	"github.com/Marlliton/speisekarte/pkg/id"
@@ -47,7 +49,16 @@ func New(customerID id.ID, items ...*OrderItem) (*Order, []*fail.Error) {
 }
 
 func (o *Order) Total() float64 {
-	return 0.0
+	total := 0.0
+	for _, item := range o.Items {
+		log.Println("aaaaaaaaaaaaaa", item.Quantity)
+		total += float64(item.Price) * float64(item.Quantity)
+	}
+	return total / 100
+}
+
+func (o *Order) DisplayTotalPrice() string {
+	return fmt.Sprintf("%.2f", o.Total())
 }
 
 func (o *Order) validate() (bool, []*fail.Error) {
@@ -71,4 +82,5 @@ func (o *Order) AddItem(item *OrderItem) {
 	}
 
 	o.Items = append(o.Items, item)
+	o.UpdatedAt = time.Now()
 }
