@@ -25,6 +25,7 @@ type Product struct {
 	// TODO: Adicionar "AddOns" para adicionais e "Note" para observação do pedido.
 }
 
+// TODO: Refatorar para os preços dos produtos serem inseridos em centavos
 type numeric interface{ int | float64 }
 
 func New[T numeric](
