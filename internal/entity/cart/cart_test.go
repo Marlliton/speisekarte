@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func createCart(t *testing.T, customerID id.ID, fee, discount int, items ...*CartItem) *Cart {
+func createCart(t *testing.T, customerID id.ID, rate, discount int, items ...*CartItem) *Cart {
 	t.Helper()
-	c, errs := New(customerID, fee, discount, items...)
+	c, errs := New(customerID, rate, discount, items...)
 	assert.Nil(t, errs)
 
 	return c
@@ -45,11 +45,11 @@ func TestNewCart_Success(t *testing.T) {
 func TestCart_Totals(t *testing.T) {
 	priceInCents := 2000 // NOTE: 20 Reais
 	qty := 2
-	fee := 100      // NOTE: Delivery fee in cents 1 real
+	rate := 100     // NOTE: Rate in cents 1 real
 	discount := 400 // NOTE: Discount in cents 4 reais
 	t.Run("get the total cart", func(t *testing.T) {
 		it := createCartItem(priceInCents, qty)
-		c := createCart(t, id.New(), fee, discount, it)
+		c := createCart(t, id.New(), rate, discount, it)
 
 		expectedTotalInCents := 3700
 		assert.Equal(t, expectedTotalInCents, c.Total)
@@ -57,7 +57,7 @@ func TestCart_Totals(t *testing.T) {
 
 	t.Run("get the sub total cart", func(t *testing.T) {
 		it := createCartItem(priceInCents, qty)
-		c := createCart(t, id.New(), fee, discount, it)
+		c := createCart(t, id.New(), rate, discount, it)
 
 		expectedTotalInCents := 4000
 		assert.Equal(t, expectedTotalInCents, c.SubTotal)
@@ -65,7 +65,7 @@ func TestCart_Totals(t *testing.T) {
 
 	t.Run("get the display total and sub total", func(t *testing.T) {
 		it := createCartItem(priceInCents, qty)
-		c := createCart(t, id.New(), fee, discount, it)
+		c := createCart(t, id.New(), rate, discount, it)
 
 		expectedTotalInCents := "37.00"
 		expectedSubTotalInCents := "40.00"
