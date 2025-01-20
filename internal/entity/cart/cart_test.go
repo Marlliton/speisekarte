@@ -77,3 +77,45 @@ func TestCart_Totals(t *testing.T) {
 }
 
 // TODO: teste dos itens
+func TestCart_AddAndRemoveItems(t *testing.T) {
+	t.Run("Add a new item", func(t *testing.T) {
+		it := createCartItem(800, 1)
+		c := createCart(t, id.New(), 0, 0)
+		assert.NotNil(t, c)
+		assert.Len(t, c.Items, 0)
+
+		c.AddItem(it)
+		assert.Len(t, c.Items, 1)
+		assert.Equal(t, 1, c.Items[0].Quantity)
+	})
+
+	t.Run("Add and modify quantity of item", func(t *testing.T) {
+		it := createCartItem(800, 1)
+		c := createCart(t, id.New(), 0, 0)
+		c.AddItem(it)
+		assert.Len(t, c.Items, 1)
+		assert.Equal(t, 1, c.Items[0].Quantity)
+
+		it.Quantity = 4
+		c.AddItem(it)
+		assert.Len(t, c.Items, 1)
+		assert.Equal(t, 4, c.Items[0].Quantity)
+
+		it2 := createCartItem(200, 2)
+		c.AddItem(it2)
+		assert.Len(t, c.Items, 2)
+		assert.Equal(t, 4, c.Items[0].Quantity)
+		assert.Equal(t, 2, c.Items[1].Quantity)
+	})
+
+	t.Run("Remove item from cart", func(t *testing.T) {
+		it := createCartItem(800, 1)
+		it2 := createCartItem(800, 1)
+		c := createCart(t, id.New(), 0, 0, it, it2)
+
+		assert.Len(t, c.Items, 2)
+
+		c.RemoveItem(it2)
+		assert.Len(t, c.Items, 1)
+	})
+}

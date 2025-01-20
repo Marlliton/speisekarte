@@ -28,6 +28,9 @@ type Cart struct {
 }
 
 func New(customerID id.ID, deliveryFee, discount int, items ...*CartItem) (*Cart, []*fail.Error) {
+	if len(items) == 0 {
+		items = make([]*CartItem, 0)
+	}
 	c := &Cart{
 		ID:          id.New(),
 		CustomerID:  customerID,
@@ -86,10 +89,18 @@ func (c *Cart) AddItem(item *CartItem) {
 	c.UpdatedAt = time.Now()
 }
 
+func (c *Cart) RemoveItem(item *CartItem) {
+	for i, it := range c.Items {
+		if item.ID == it.ID {
+			c.Items = append(c.Items[:i], c.Items[i+1:]...)
+		}
+	}
+}
+
 func (c *Cart) validate() (bool, []*fail.Error) {
 	v := validator.New()
 	v.Add("CustomerID", rule.Rules{rule.Required()})
-	v.Add("Items", rule.Rules{rule.Required(), rule.MinLength(0)})
+	v.Add("Items", rule.Rules{rule.MinLength(0)})
 	v.Add("DeliveryFee", rule.Rules{rule.Required(), rule.MinValue(0)})
 	v.Add("Discount", rule.Rules{rule.Required(), rule.MinValue(0)})
 	v.Add("Total", rule.Rules{rule.Required(), rule.MinValue(0)})
