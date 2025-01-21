@@ -17,6 +17,7 @@ type Product struct {
 	ImageURL    string
 	Price       int
 	Available   bool
+	Note        string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	CategoryID  id.ID
