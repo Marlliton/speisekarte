@@ -2,7 +2,6 @@ package product
 
 import (
 	"fmt"
-	"math"
 	"time"
 
 	"github.com/Marlliton/speisekarte/pkg/id"
@@ -25,19 +24,15 @@ type Product struct {
 	// TODO: Adicionar "AddOns" para adicionais e "Note" para observação do pedido.
 }
 
-// TODO: Refatorar para os preços dos produtos serem inseridos em centavos
-type numeric interface{ int | float64 }
-
-func New[T numeric](
-	name, description, imageURL string, price T, available bool, categoryID id.ID,
+func New(
+	name, description, imageURL string, price int, available bool, categoryID id.ID,
 ) (*Product, []*fail.Error) {
-	priceInCents := convertToCents(price)
 	p := &Product{
 		ID:          id.New(),
 		Name:        name,
 		Description: description,
 		ImageURL:    imageURL,
-		Price:       priceInCents,
+		Price:       price,
 		Available:   available,
 		CreatedAt:   time.Now(),
 		CategoryID:  categoryID,
@@ -55,22 +50,9 @@ func (p *Product) DisplayPrice() string {
 	return fmt.Sprintf("%.2f", float64(p.Price)/100)
 }
 
-func convertToCents[T numeric](value T) int {
-	switch v := any(value).(type) {
-	case int:
-		return v * 100
-	case float64:
-		return int(math.Round(v * 100))
-	default:
-		return -1
-	}
-}
-
 func (p *Product) validate() (bool, []*fail.Error) {
 	v := validator.New()
-	v.Add("ID", rule.Rules{
-		rule.Required(),
-	})
+	v.Add("ID", rule.Rules{rule.Required()})
 	v.Add("Name", rule.Rules{
 		rule.Required(),
 		rule.MinLength(3),
@@ -81,17 +63,9 @@ func (p *Product) validate() (bool, []*fail.Error) {
 		rule.MinLength(5),
 		rule.MaxLength(300),
 	})
-	v.Add("ImageURL", rule.Rules{
-		rule.Required(),
-		rule.ValidURL(),
-	})
-	v.Add("Price", rule.Rules{
-		rule.Required(),
-		rule.MinValue(0),
-	})
-	v.Add("Available", rule.Rules{
-		rule.Bool(),
-	})
+	v.Add("ImageURL", rule.Rules{rule.Required(), rule.ValidURL()})
+	v.Add("Price", rule.Rules{rule.Required(), rule.MinValue(0)})
+	v.Add("Available", rule.Rules{rule.Bool()})
 	v.Add("CategoryID", rule.Rules{rule.Required()})
 
 	errs := v.Validate(*p)

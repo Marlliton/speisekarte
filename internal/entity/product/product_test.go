@@ -10,7 +10,7 @@ import (
 func TestProduct_New(t *testing.T) {
 	t.Run("should create a valid product", func(t *testing.T) {
 		categoryID := id.New()
-		p, errs := New("Product Name", "Product Description", "http://test.com", 19.65, true, categoryID)
+		p, errs := New("Product Name", "Product Description", "http://test.com", 1965, true, categoryID)
 		assert.Nil(t, errs)
 		assert.NotNil(t, p.Name)
 		assert.NotNil(t, p.Description)
@@ -22,7 +22,7 @@ func TestProduct_New(t *testing.T) {
 
 	t.Run("should return display price", func(t *testing.T) {
 		categoryID := id.New()
-		p, _ := New("Product Name", "Product Description", "http://test.com", 19.65, true, categoryID)
+		p, _ := New("Product Name", "Product Description", "http://test.com", 1965, true, categoryID)
 		assert.Equal(t, 1965, p.Price)
 
 		displayPrice := p.DisplayPrice()
@@ -35,7 +35,7 @@ func TestProduct_FailToCreate(t *testing.T) {
 		name           string
 		description    string
 		imageURL       string
-		price          float64
+		price          int
 		available      bool
 		categoryID     id.ID
 		expectedErrLen int
@@ -45,7 +45,7 @@ func TestProduct_FailToCreate(t *testing.T) {
 			name:           "",
 			description:    "Valid Description",
 			imageURL:       "http://test.com",
-			price:          10.5,
+			price:          1000,
 			available:      true,
 			categoryID:     id.New(),
 			expectedErrLen: 2,
@@ -55,7 +55,7 @@ func TestProduct_FailToCreate(t *testing.T) {
 			name:           "valid name",
 			description:    "",
 			imageURL:       "http://test.com",
-			price:          10.5,
+			price:          1000,
 			available:      true,
 			categoryID:     id.New(),
 			expectedErrLen: 2,
@@ -65,7 +65,7 @@ func TestProduct_FailToCreate(t *testing.T) {
 			name:           "valid name",
 			description:    "Valid description",
 			imageURL:       "",
-			price:          10.5,
+			price:          1000,
 			available:      true,
 			categoryID:     id.New(),
 			expectedErrLen: 2,
@@ -75,7 +75,7 @@ func TestProduct_FailToCreate(t *testing.T) {
 			name:           "valid name",
 			description:    "Valid description",
 			imageURL:       "ivalid_url",
-			price:          10.5,
+			price:          1000,
 			available:      true,
 			categoryID:     id.New(),
 			expectedErrLen: 1,
@@ -85,7 +85,7 @@ func TestProduct_FailToCreate(t *testing.T) {
 			name:           "valid name",
 			description:    "Valid description",
 			imageURL:       "https://valid.com",
-			price:          10.5,
+			price:          1000,
 			available:      true,
 			categoryID:     id.ID{},
 			expectedErrLen: 1,
