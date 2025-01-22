@@ -7,19 +7,33 @@ import (
 	"github.com/Marlliton/validator/rule"
 )
 
-// TODO: Criar struct que represente os adicionais do pedido
-type OrderItem struct {
+// TODO: Separar essa entidade em um outro arquivo.
+type AddOn struct {
+	ID          id.ID
+	OrderItemID id.ID
+	Name        string
+	Price       int
+}
+
+type Item struct {
 	ID        id.ID
 	OrderID   id.ID
 	ProductID id.ID
+	AddOns    []*AddOn
 	Quantity  int
 	Price     int
 }
 
-func NewOrderItem(orderID, productID id.ID, quantity, price int) (*OrderItem, []*fail.Error) {
-	o := &OrderItem{ID: id.New(),
+func NewItem(
+	orderID, productID id.ID, quantity, price int, addOns ...*AddOn,
+) (*Item, []*fail.Error) {
+	if len(addOns) == 0 {
+		addOns = make([]*AddOn, 0)
+	}
+	o := &Item{ID: id.New(),
 		OrderID:   orderID,
 		ProductID: productID,
+		AddOns:    addOns,
 		Quantity:  quantity,
 		Price:     price,
 	}
@@ -31,7 +45,7 @@ func NewOrderItem(orderID, productID id.ID, quantity, price int) (*OrderItem, []
 	return o, nil
 }
 
-func (o *OrderItem) validate() (bool, []*fail.Error) {
+func (o *Item) validate() (bool, []*fail.Error) {
 	v := validator.New()
 	v.Add("OrderID", rule.Rules{rule.Required()})
 	v.Add("ProductID", rule.Rules{rule.Required()})

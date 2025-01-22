@@ -18,7 +18,7 @@ type priceDisplay struct {
 type Cart struct {
 	ID         id.ID
 	CustomerID id.ID
-	Items      []*CartItem
+	Items      []*Item
 	Rate       int
 	Discount   int
 	Total      int
@@ -27,9 +27,9 @@ type Cart struct {
 	UpdatedAt  time.Time
 }
 
-func New(customerID id.ID, deliveryFee, discount int, items ...*CartItem) (*Cart, []*fail.Error) {
+func New(customerID id.ID, deliveryFee, discount int, items ...*Item) (*Cart, []*fail.Error) {
 	if len(items) == 0 {
-		items = make([]*CartItem, 0)
+		items = make([]*Item, 0)
 	}
 	c := &Cart{
 		ID:         id.New(),
@@ -77,7 +77,7 @@ func (c *Cart) DisplayTotalPrice() priceDisplay {
 	return priceDisplay{total, subTotal}
 }
 
-func (c *Cart) AddItem(item *CartItem) {
+func (c *Cart) AddItem(item *Item) {
 	for i, it := range c.Items {
 		if it.ProductID == item.ProductID {
 			c.Items[i].Quantity = item.Quantity
@@ -89,7 +89,7 @@ func (c *Cart) AddItem(item *CartItem) {
 	c.UpdatedAt = time.Now()
 }
 
-func (c *Cart) RemoveItem(item *CartItem) {
+func (c *Cart) RemoveItem(item *Item) {
 	for i, it := range c.Items {
 		if item.ID == it.ID {
 			c.Items = append(c.Items[:i], c.Items[i+1:]...)

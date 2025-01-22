@@ -21,14 +21,14 @@ const (
 type Order struct {
 	ID         id.ID
 	CustomerID id.ID
-	Items      []*OrderItem
+	Items      []*Item
 	Status     OrderStatus
 	Total      int
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
 
-func New(customerID id.ID, items ...*OrderItem) (*Order, []*fail.Error) {
+func New(customerID id.ID, items ...*Item) (*Order, []*fail.Error) {
 	o := &Order{
 		ID:         id.New(),
 		CustomerID: customerID,

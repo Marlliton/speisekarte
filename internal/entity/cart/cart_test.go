@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func createCart(t *testing.T, customerID id.ID, rate, discount int, items ...*CartItem) *Cart {
+func createCart(t *testing.T, customerID id.ID, rate, discount int, items ...*Item) *Cart {
 	t.Helper()
 	c, errs := New(customerID, rate, discount, items...)
 	assert.Nil(t, errs)
@@ -15,8 +15,8 @@ func createCart(t *testing.T, customerID id.ID, rate, discount int, items ...*Ca
 	return c
 }
 
-func createCartItem(price, quantity int) *CartItem {
-	return &CartItem{
+func createCartItem(price, quantity int) *Item {
+	return &Item{
 		ID:        id.New(),
 		ProductID: id.New(),
 		Price:     price,
@@ -27,7 +27,7 @@ func createCartItem(price, quantity int) *CartItem {
 
 func TestNewCart_Success(t *testing.T) {
 	customerID := id.New()
-	cartItem := []*CartItem{
+	cartItem := []*Item{
 		{
 			ID:        id.New(),
 			ProductID: id.New(),

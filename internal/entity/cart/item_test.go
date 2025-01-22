@@ -7,9 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TODO: Deixar os testes no mesmo padrão dos outros com t.Run()
 func TestNewCartItem_Success(t *testing.T) {
 	priceInCents := 900 // 9 reais
-	c, errs := NewCartItem(id.New(), id.New(), priceInCents, 2)
+	c, errs := NewItem(id.New(), id.New(), priceInCents, 2)
 	assert.Nil(t, errs)
 	assert.NotNil(t, c)
 	assert.Equal(t, 2, c.Quantity)
@@ -19,7 +20,7 @@ func TestNewCartItem_ValidationFails(t *testing.T) {
 	// Missing cart ID and prod ID
 	cartID := id.ID{}
 	prodID := id.ID{}
-	ci, errs := NewCartItem(cartID, prodID, 900, 0)
+	ci, errs := NewItem(cartID, prodID, 900, 0)
 	assert.Nil(t, ci)
 	assert.NotNil(t, errs)
 }

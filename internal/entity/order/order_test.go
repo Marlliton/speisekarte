@@ -9,7 +9,7 @@ import (
 
 func TestNewOrder_Success(t *testing.T) {
 	customerID := id.New()
-	items := []*OrderItem{
+	items := []*Item{
 		{
 			ID:        id.New(),
 			ProductID: id.New(),
@@ -32,7 +32,7 @@ func TestNewOrder_Success(t *testing.T) {
 
 func TestNewOrder_FailToCreate(t *testing.T) {
 	t.Run("should fail to create whitout id", func(t *testing.T) {
-		order, errs := New(id.ID{}, &OrderItem{
+		order, errs := New(id.ID{}, &Item{
 			ID:        id.New(),
 			ProductID: id.New(),
 			Quantity:  1,
