@@ -18,11 +18,10 @@ type Product struct {
 	Price       int
 	Available   bool
 	Note        string
+	AddOns      []*AddOn
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	CategoryID  id.ID
-
-	// TODO: Adicionar "AddOns" para adicionais e "Note" para observação do pedido.
 }
 
 func New(

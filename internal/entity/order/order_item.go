@@ -7,6 +7,7 @@ import (
 	"github.com/Marlliton/validator/rule"
 )
 
+// TODO: Criar struct que represente os adicionais do pedido
 type OrderItem struct {
 	ID        id.ID
 	OrderID   id.ID
