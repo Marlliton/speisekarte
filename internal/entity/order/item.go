@@ -7,14 +7,6 @@ import (
 	"github.com/Marlliton/validator/rule"
 )
 
-// TODO: Separar essa entidade em um outro arquivo.
-type AddOn struct {
-	ID          id.ID
-	OrderItemID id.ID
-	Name        string
-	Price       int
-}
-
 type Item struct {
 	ID        id.ID
 	OrderID   id.ID

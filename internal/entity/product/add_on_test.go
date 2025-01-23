@@ -22,7 +22,7 @@ func TestAddOn_New(t *testing.T) {
 		assert.Equal(t, price, addOn.Price)
 	})
 
-	t.Run("should create an add-on with minimum price and quantity", func(t *testing.T) {
+	t.Run("should create an add-on with minimum price", func(t *testing.T) {
 		addOn, errs := NewAddOn(productID, name, 0)
 
 		assert.Nil(t, errs)

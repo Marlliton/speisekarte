@@ -36,6 +36,24 @@ func TestOrderItem_New(t *testing.T) {
 	})
 }
 
+func TestOrderItem_AddOn(t *testing.T) {
+	item := Item{
+		ID:        id.New(),
+		OrderID:   id.New(),
+		ProductID: id.New(),
+		Quantity:  2,
+		Price:     100,
+	}
+	addOn, _ := NewAddOn(item.ID, "Extra Cheese", 100, 2)
+	assert.NotNil(t, addOn)
+
+	orderItem, errs := NewItem(item.OrderID, item.ProductID, item.Quantity, item.Price, addOn)
+
+	assert.Nil(t, errs)
+	assert.NotNil(t, orderItem)
+	assert.Len(t, orderItem.AddOns, 1)
+}
+
 func TestOrderItem_FailToCreate(t *testing.T) {
 	orderID := id.New()
 	productID := id.New()
