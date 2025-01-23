@@ -11,6 +11,7 @@ type Item struct {
 	ID        id.ID
 	CartID    id.ID
 	ProductID id.ID
+	AddOns    []*AddOn
 	Price     int
 	Quantity  int
 }
@@ -29,6 +30,27 @@ func NewItem(cartID, prodID id.ID, price, quantity int) (*Item, []*fail.Error) {
 	}
 
 	return ci, nil
+}
+
+// TODO: Criar os testes de adição e remoção
+func (it *Item) IncludeAddOn(addOn *AddOn) {
+	for _, ad := range it.AddOns {
+		if ad.ID == addOn.ID {
+			ad.Quantity = addOn.Quantity
+			return
+		}
+	}
+
+	it.AddOns = append(it.AddOns, addOn)
+}
+
+func (it *Item) RemoveAddOn(id id.ID) {
+	for i, ad := range it.AddOns {
+		if ad.ID == id {
+			it.AddOns = append(it.AddOns[:i], it.AddOns[i+1:]...)
+			return
+		}
+	}
 }
 
 func (ci *Item) validate() (bool, []*fail.Error) {

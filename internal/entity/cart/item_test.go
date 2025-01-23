@@ -7,20 +7,72 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TODO: Deixar os testes no mesmo padrão dos outros com t.Run()
-func TestNewCartItem_Success(t *testing.T) {
-	priceInCents := 900 // 9 reais
-	c, errs := NewItem(id.New(), id.New(), priceInCents, 2)
-	assert.Nil(t, errs)
-	assert.NotNil(t, c)
-	assert.Equal(t, 2, c.Quantity)
+func TestNewItem_Creation(t *testing.T) {
+	t.Run("should create a new item successfully", func(t *testing.T) {
+		cartID := id.New()
+		prodID := id.New()
+		price := 900
+		quantity := 2
+
+		item, errs := NewItem(cartID, prodID, price, quantity)
+
+		assert.Nil(t, errs)
+		assert.NotNil(t, item)
+		assert.Equal(t, cartID, item.CartID)
+		assert.Equal(t, prodID, item.ProductID)
+		assert.Equal(t, price, item.Price)
+		assert.Equal(t, quantity, item.Quantity)
+	})
 }
 
-func TestNewCartItem_ValidationFails(t *testing.T) {
-	// Missing cart ID and prod ID
-	cartID := id.ID{}
-	prodID := id.ID{}
-	ci, errs := NewItem(cartID, prodID, 900, 0)
-	assert.Nil(t, ci)
-	assert.NotNil(t, errs)
+func TestNewItem_Validation(t *testing.T) {
+	t.Run("should fail when CartID is missing", func(t *testing.T) {
+		prodID := id.New()
+		price := 900
+		quantity := 1
+
+		item, errs := NewItem(id.ID{}, prodID, price, quantity)
+
+		assert.Nil(t, item)
+		assert.NotNil(t, errs)
+		assert.Len(t, errs, 1)
+	})
+
+	t.Run("should fail when ProductID is missing", func(t *testing.T) {
+		cartID := id.New()
+		price := 900
+		quantity := 1
+
+		item, errs := NewItem(cartID, id.ID{}, price, quantity)
+
+		assert.Nil(t, item)
+		assert.NotNil(t, errs)
+		assert.Len(t, errs, 1)
+	})
+
+	t.Run("should fail when Price is negative", func(t *testing.T) {
+		cartID := id.New()
+		prodID := id.New()
+		price := -100
+		quantity := 1
+
+		item, errs := NewItem(cartID, prodID, price, quantity)
+
+		assert.Nil(t, item)
+		assert.NotNil(t, errs)
+		assert.Len(t, errs, 1)
+	})
+
+	t.Run("should fail when Quantity is zero", func(t *testing.T) {
+		cartID := id.New()
+		prodID := id.New()
+		price := 900
+		quantity := 0
+
+		item, errs := NewItem(cartID, prodID, price, quantity)
+
+		assert.Nil(t, item)
+		assert.NotNil(t, errs)
+		assert.Len(t, errs, 1)
+	})
 }

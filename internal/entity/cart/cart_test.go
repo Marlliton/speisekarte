@@ -76,7 +76,6 @@ func TestCart_Totals(t *testing.T) {
 	})
 }
 
-// TODO: teste dos itens
 func TestCart_AddAndRemoveItems(t *testing.T) {
 	t.Run("Add a new item", func(t *testing.T) {
 		it := createCartItem(800, 1)
@@ -115,7 +114,7 @@ func TestCart_AddAndRemoveItems(t *testing.T) {
 
 		assert.Len(t, c.Items, 2)
 
-		c.RemoveItem(it2)
+		c.RemoveItem(it2.ID)
 		assert.Len(t, c.Items, 1)
 	})
 }

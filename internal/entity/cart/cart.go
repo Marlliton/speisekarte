@@ -81,17 +81,18 @@ func (c *Cart) AddItem(item *Item) {
 	for i, it := range c.Items {
 		if it.ProductID == item.ProductID {
 			c.Items[i].Quantity = item.Quantity
+			c.UpdatedAt = time.Now()
 			return
 		}
 	}
 
-	c.Items = append(c.Items, item)
+	c.Items = append(c.Items, item) // NOTE: Se o item não existir adiciona no cart
 	c.UpdatedAt = time.Now()
 }
 
-func (c *Cart) RemoveItem(item *Item) {
+func (c *Cart) RemoveItem(id id.ID) {
 	for i, it := range c.Items {
-		if item.ID == it.ID {
+		if it.ID == id {
 			c.Items = append(c.Items[:i], c.Items[i+1:]...)
 			c.UpdatedAt = time.Now()
 		}
