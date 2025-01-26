@@ -15,9 +15,10 @@ type AddOn struct {
 	Quantity   int
 }
 
-func NewAddOn(orderItemID id.ID, name string, price, quantity int) (*AddOn, []*fail.Error) {
+func NewAddOn(cartItemID id.ID, name string, price, quantity int) (*AddOn, []*fail.Error) {
 	a := &AddOn{
-		CartItemID: orderItemID,
+		ID:         id.New(),
+		CartItemID: cartItemID,
 		Name:       name,
 		Price:      price,
 		Quantity:   quantity,
@@ -32,6 +33,7 @@ func NewAddOn(orderItemID id.ID, name string, price, quantity int) (*AddOn, []*f
 
 func (a *AddOn) validate() (bool, []*fail.Error) {
 	v := validator.New()
+	v.Add("ID", rule.Rules{rule.Required()})
 	v.Add("CartItemID", rule.Rules{rule.Required()})
 	v.Add("Name", rule.Rules{
 		rule.Required(),

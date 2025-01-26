@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewItem_Creation(t *testing.T) {
+func TestNewCartItem_Creation(t *testing.T) {
 	t.Run("should create a new item successfully", func(t *testing.T) {
 		cartID := id.New()
 		prodID := id.New()
@@ -25,7 +25,61 @@ func TestNewItem_Creation(t *testing.T) {
 	})
 }
 
-func TestNewItem_Validation(t *testing.T) {
+func TestCartItem_IncludeAddOn(t *testing.T) {
+	cartID := id.New()
+	prodID := id.New()
+	price := 900
+	quantity := 2
+
+	t.Run("should include an add-on to the item", func(t *testing.T) {
+		item, errs := NewItem(cartID, prodID, price, quantity)
+		assert.Nil(t, errs)
+		assert.NotNil(t, item)
+
+		addOn1, errs := NewAddOn(cartID, "Extra Cheese", 500, 2)
+		assert.Nil(t, errs)
+		assert.NotNil(t, addOn1)
+
+		item.IncludeAddOn(addOn1)
+		assert.Len(t, item.AddOns, 1)
+		assert.Equal(t, addOn1.ID, item.AddOns[0].ID)
+		assert.Equal(t, addOn1.Quantity, item.AddOns[0].Quantity)
+
+		addOn2, errs := NewAddOn(cartID, "French fries", 1500, 4)
+		assert.Nil(t, errs)
+		assert.NotNil(t, addOn1)
+
+		item.IncludeAddOn(addOn2)
+		assert.Len(t, item.AddOns, 2)
+		assert.Equal(t, addOn2.ID, item.AddOns[1].ID)
+		assert.Equal(t, addOn2.Quantity, item.AddOns[1].Quantity)
+	})
+	t.Run("should remove an add-on from the item", func(t *testing.T) {
+		item, errs := NewItem(cartID, prodID, price, quantity)
+		assert.Nil(t, errs)
+		assert.NotNil(t, item)
+
+		addOn1, errs := NewAddOn(cartID, "Extra Cheese", 500, 2)
+		addOn2, errs := NewAddOn(cartID, "French fries", 1500, 4)
+		assert.Nil(t, errs)
+		assert.NotNil(t, addOn1)
+
+		item.IncludeAddOn(addOn1)
+		item.IncludeAddOn(addOn2)
+		assert.Len(t, item.AddOns, 2)
+		assert.Equal(t, addOn2.ID, item.AddOns[1].ID)
+		assert.Equal(t, addOn2.Quantity, item.AddOns[1].Quantity)
+
+		// remove addon
+		item.RemoveAddOn(addOn2.ID)
+		assert.Len(t, item.AddOns, 1)
+		assert.NotNil(t, item.AddOns[0])
+		assert.Len(t, item.AddOns, 1)
+		assert.Equal(t, addOn1.ID, item.AddOns[0].ID)
+	})
+}
+
+func TestCartItem_Validation(t *testing.T) {
 	t.Run("should fail when CartID is missing", func(t *testing.T) {
 		prodID := id.New()
 		price := 900
