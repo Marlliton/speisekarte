@@ -27,14 +27,14 @@ type Cart struct {
 	UpdatedAt  time.Time
 }
 
-func New(customerID id.ID, deliveryFee, discount int, items ...*Item) (*Cart, []*fail.Error) {
+func New(customerID id.ID, rate, discount int, items ...*Item) (*Cart, []*fail.Error) {
 	if len(items) == 0 {
 		items = make([]*Item, 0)
 	}
 	c := &Cart{
 		ID:         id.New(),
 		CustomerID: customerID,
-		Rate:       deliveryFee,
+		Rate:       rate,
 		Discount:   discount,
 		Items:      items,
 		CreatedAt:  time.Now(),
@@ -103,9 +103,10 @@ func (c *Cart) RemoveItem(id id.ID) {
 
 func (c *Cart) validate() (bool, []*fail.Error) {
 	v := validator.New()
+	v.Add("ID", rule.Rules{rule.Required()})
 	v.Add("CustomerID", rule.Rules{rule.Required()})
 	v.Add("Items", rule.Rules{rule.MinLength(0)})
-	v.Add("DeliveryFee", rule.Rules{rule.Required(), rule.MinValue(0)})
+	v.Add("Rate", rule.Rules{rule.Required(), rule.MinValue(0)})
 	v.Add("Discount", rule.Rules{rule.Required(), rule.MinValue(0)})
 	v.Add("Total", rule.Rules{rule.Required(), rule.MinValue(0)})
 	v.Add("SubTotal", rule.Rules{rule.Required(), rule.MinValue(0)})
