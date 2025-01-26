@@ -51,14 +51,16 @@ func New(customerID id.ID, deliveryFee, discount int, items ...*Item) (*Cart, []
 	return c, nil
 }
 
+// NOTE: Valor total da compra
 func (c *Cart) calculateSubTotal() int {
 	subTotal := 0
 	for _, item := range c.Items {
-		subTotal += item.Price * item.Quantity
+		subTotal += item.GetTotalPrice()
 	}
 	return subTotal
 }
 
+// NOTE: Valor final que o cliente tem que pagar
 func (c *Cart) calculateTotal() int {
 	subTotal := c.calculateSubTotal()
 

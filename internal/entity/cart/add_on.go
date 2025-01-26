@@ -31,6 +31,10 @@ func NewAddOn(cartItemID id.ID, name string, price, quantity int) (*AddOn, []*fa
 	return a, nil
 }
 
+func (ad *AddOn) GetTotalPrice() int {
+	return ad.Price * ad.Quantity
+}
+
 func (a *AddOn) validate() (bool, []*fail.Error) {
 	v := validator.New()
 	v.Add("ID", rule.Rules{rule.Required()})

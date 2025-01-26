@@ -54,6 +54,7 @@ func TestCartItem_IncludeAddOn(t *testing.T) {
 		assert.Equal(t, addOn2.ID, item.AddOns[1].ID)
 		assert.Equal(t, addOn2.Quantity, item.AddOns[1].Quantity)
 	})
+
 	t.Run("should remove an add-on from the item", func(t *testing.T) {
 		item, errs := NewItem(cartID, prodID, price, quantity)
 		assert.Nil(t, errs)
@@ -76,6 +77,32 @@ func TestCartItem_IncludeAddOn(t *testing.T) {
 		assert.NotNil(t, item.AddOns[0])
 		assert.Len(t, item.AddOns, 1)
 		assert.Equal(t, addOn1.ID, item.AddOns[0].ID)
+	})
+}
+
+func TestItem_GetTotalPrice(t *testing.T) {
+	orderItemID := id.New()
+	name := "Extra Cheese"
+	price := 200
+	qty := 4
+
+	cartID := id.New()
+	prodID := id.New()
+	itemPrice := 900
+	quantity := 2
+	itemTotal := 2600
+
+	t.Run("should get a total price", func(t *testing.T) {
+		addOn, errs := NewAddOn(orderItemID, name, price, qty)
+		assert.Nil(t, errs)
+		assert.NotNil(t, addOn)
+
+		item, errs := NewItem(cartID, prodID, itemPrice, quantity)
+		assert.Nil(t, errs)
+		assert.NotNil(t, item)
+		item.IncludeAddOn(addOn)
+
+		assert.Equal(t, itemTotal, item.GetTotalPrice())
 	})
 }
 

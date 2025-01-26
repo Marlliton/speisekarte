@@ -35,6 +35,22 @@ func TestAddOn_New(t *testing.T) {
 	})
 }
 
+func TestAddOn_GetTotalPrice(t *testing.T) {
+	orderItemID := id.New()
+	name := "Extra Cheese"
+	price := 200
+	qty := 4
+	total := 800
+
+	t.Run("should get a total price", func(t *testing.T) {
+		addOn, errs := NewAddOn(orderItemID, name, price, qty)
+
+		assert.NotNil(t, addOn)
+		assert.Nil(t, errs)
+		assert.Equal(t, total, addOn.GetTotalPrice())
+	})
+}
+
 func TestAddOn_FailToCreate(t *testing.T) {
 	orderItemID := id.New()
 	t.Run("should fail to create without OrderItemID", func(t *testing.T) {

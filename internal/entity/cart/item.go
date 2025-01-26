@@ -32,7 +32,14 @@ func NewItem(cartID, prodID id.ID, price, quantity int) (*Item, []*fail.Error) {
 	return ci, nil
 }
 
-// TODO: Criar os testes de adição e remoção
+func (it *Item) GetTotalPrice() int {
+	addOnsTotal := 0
+	for _, ad := range it.AddOns {
+		addOnsTotal += ad.GetTotalPrice()
+	}
+	return (it.Price * it.Quantity) + addOnsTotal
+}
+
 func (it *Item) IncludeAddOn(addOn *AddOn) {
 	for i, ad := range it.AddOns {
 		if ad.ID == addOn.ID {
