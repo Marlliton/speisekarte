@@ -9,18 +9,18 @@ import (
 	"github.com/Marlliton/speisekarte/pkg/id"
 )
 
-type customerRespository struct {
+type customerRepository struct {
 	sync.RWMutex
 	Customers map[id.ID]*customer.Customer
 }
 
-func NewCustomerRepository() *customerRespository {
-	return &customerRespository{
+func NewCustomerRepository() *customerRepository {
+	return &customerRepository{
 		Customers: make(map[id.ID]*customer.Customer),
 	}
 }
 
-func (r *customerRespository) Save(ctx context.Context, customer *customer.Customer) *apperr.AppErr {
+func (r *customerRepository) Save(ctx context.Context, customer *customer.Customer) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 
@@ -28,7 +28,7 @@ func (r *customerRespository) Save(ctx context.Context, customer *customer.Custo
 	return nil
 }
 
-func (r *customerRespository) FindByID(ctx context.Context, id id.ID) (*customer.Customer, *apperr.AppErr) {
+func (r *customerRepository) FindByID(ctx context.Context, id id.ID) (*customer.Customer, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
 
