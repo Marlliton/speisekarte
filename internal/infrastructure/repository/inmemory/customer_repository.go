@@ -2,10 +2,10 @@ package inmemory
 
 import (
 	"context"
-	"errors"
 	"sync"
 
 	"github.com/Marlliton/speisekarte/internal/entity/customer"
+	"github.com/Marlliton/speisekarte/pkg/apperr"
 	"github.com/Marlliton/speisekarte/pkg/id"
 )
 
@@ -20,10 +20,12 @@ func NewCustomerRepository() *customerRespository {
 	}
 }
 
-func (r *customerRespository) Save(ctx context.Context, customer *customer.Customer) error {
+func (r *customerRespository) Save(ctx context.Context, customer *customer.Customer) *apperr.AppErr {
 	select {
 	case <-ctx.Done():
-		return ctx.Err()
+		return &apperr.AppErr{
+			Message: ctx.Err().Error(),
+		}
 	default:
 	}
 
@@ -34,10 +36,12 @@ func (r *customerRespository) Save(ctx context.Context, customer *customer.Custo
 	return nil
 }
 
-func (r *customerRespository) FindByID(ctx context.Context, id id.ID) (*customer.Customer, error) {
+func (r *customerRespository) FindByID(ctx context.Context, id id.ID) (*customer.Customer, *apperr.AppErr) {
 	select {
 	case <-ctx.Done():
-		return nil, ctx.Err()
+		return nil, &apperr.AppErr{
+			Message: ctx.Err().Error(),
+		}
 	default:
 	}
 
@@ -45,7 +49,7 @@ func (r *customerRespository) FindByID(ctx context.Context, id id.ID) (*customer
 	defer r.Unlock()
 
 	if _, ok := r.customers[id]; !ok {
-		return nil, errors.New("customer not found")
+		return nil, &apperr.AppErr{Message: "customer not found."}
 	}
 
 	return r.customers[id], nil
