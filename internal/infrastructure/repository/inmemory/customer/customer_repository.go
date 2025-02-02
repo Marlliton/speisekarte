@@ -11,12 +11,12 @@ import (
 
 type customerRepository struct {
 	sync.RWMutex
-	Customers map[id.ID]*customer.Customer
+	customers map[id.ID]*customer.Customer
 }
 
 func NewCustomerRepository() *customerRepository {
 	return &customerRepository{
-		Customers: make(map[id.ID]*customer.Customer),
+		customers: make(map[id.ID]*customer.Customer),
 	}
 }
 
@@ -24,7 +24,7 @@ func (r *customerRepository) Save(ctx context.Context, customer *customer.Custom
 	r.Lock()
 	defer r.Unlock()
 
-	r.Customers[customer.ID] = customer
+	r.customers[customer.ID] = customer
 	return nil
 }
 
@@ -32,9 +32,9 @@ func (r *customerRepository) FindByID(ctx context.Context, id id.ID) (*customer.
 	r.RLock()
 	defer r.RUnlock()
 
-	if _, ok := r.Customers[id]; !ok {
+	if _, ok := r.customers[id]; !ok {
 		return nil, apperr.New("not found")
 	}
 
-	return r.Customers[id], nil
+	return r.customers[id], nil
 }
