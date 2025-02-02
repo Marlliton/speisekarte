@@ -21,14 +21,6 @@ func NewCustomerRepository() *customerRespository {
 }
 
 func (r *customerRespository) Save(ctx context.Context, customer *customer.Customer) *apperr.AppErr {
-	select {
-	case <-ctx.Done():
-		return &apperr.AppErr{
-			Message: ctx.Err().Error(),
-		}
-	default:
-	}
-
 	r.Lock()
 	defer r.Unlock()
 
@@ -37,19 +29,11 @@ func (r *customerRespository) Save(ctx context.Context, customer *customer.Custo
 }
 
 func (r *customerRespository) FindByID(ctx context.Context, id id.ID) (*customer.Customer, *apperr.AppErr) {
-	select {
-	case <-ctx.Done():
-		return nil, &apperr.AppErr{
-			Message: ctx.Err().Error(),
-		}
-	default:
-	}
-
 	r.Lock()
 	defer r.Unlock()
 
 	if _, ok := r.customers[id]; !ok {
-		return nil, &apperr.AppErr{Message: "customer not found."}
+		return nil, apperr.New("not found")
 	}
 
 	return r.customers[id], nil

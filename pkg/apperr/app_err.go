@@ -3,7 +3,7 @@ package apperr
 import "fmt"
 
 type AppErr struct {
-	Code    int
+	Code    *int
 	Message string
 	Reasons []Reason
 }
@@ -13,12 +13,17 @@ type Reason struct {
 	Field       string
 }
 
-func New(code int, message string) *AppErr {
+func New(message string) *AppErr {
 	return &AppErr{
-		Code:    code,
 		Message: message,
 		Reasons: []Reason{},
 	}
+}
+
+func (err *AppErr) WithCode(code int) *AppErr {
+	err.Code = &code
+
+	return err
 }
 
 func (err *AppErr) WithReason(description, field string) *AppErr {
@@ -28,8 +33,18 @@ func (err *AppErr) WithReason(description, field string) *AppErr {
 }
 
 func (err *AppErr) Error() string {
+	codeStr := ""
+	if err.Code != nil {
+		codeStr = fmt.Sprintf("code: %d", *err.Code)
+	}
+
 	if len(err.Reasons) == 0 {
-		return fmt.Sprintf("code: %d, message: %s", err.Code, err.Message)
+		if codeStr != "" {
+
+			return fmt.Sprintf("%s, message: %s", codeStr, err.Message)
+		}
+
+		return fmt.Sprintf("message: %s", err.Message)
 	}
 
 	reasons := ""
@@ -37,12 +52,20 @@ func (err *AppErr) Error() string {
 		reasons += fmt.Sprintf(", reason: {field: %s, description: %s}", reason.Field, reason.Description)
 	}
 
-	return fmt.Sprintf("code: %d, message: %s%s", err.Code, err.Message, reasons)
+	if codeStr != "" {
+
+		return fmt.Sprintf("%s, message: %s%s", codeStr, err.Message, reasons)
+	}
+
+	return fmt.Sprintf("message: %s%s", err.Message, reasons)
 }
 
 func (err *AppErr) Is(target error) bool {
 	if target, ok := target.(*AppErr); ok {
-		return err.Code == target.Code && err.Message == target.Message
+		if err.Code != nil {
+			return err.Code == target.Code && err.Message == target.Message
+		}
+		return err.Message == target.Message
 	}
 	return false
 }
