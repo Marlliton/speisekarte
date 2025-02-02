@@ -14,7 +14,7 @@ func TestOrderItem_New(t *testing.T) {
 	price := 100
 
 	t.Run("should create an order item", func(t *testing.T) {
-		orderItem, errs := NewItem(orderID, productID, quantity, price)
+		orderItem, errs := OrderNewItem(orderID, productID, quantity, price)
 
 		assert.Nil(t, errs)
 		assert.NotNil(t, orderItem)
@@ -25,7 +25,7 @@ func TestOrderItem_New(t *testing.T) {
 	})
 
 	t.Run("should create an order item with minimum price and quantity", func(t *testing.T) {
-		orderItem, errs := NewItem(orderID, productID, 1, 0)
+		orderItem, errs := OrderNewItem(orderID, productID, 1, 0)
 
 		assert.Nil(t, errs)
 		assert.NotNil(t, orderItem)
@@ -37,17 +37,17 @@ func TestOrderItem_New(t *testing.T) {
 }
 
 func TestOrderItem_AddOn(t *testing.T) {
-	item := Item{
+	item := OrderItem{
 		ID:        id.New(),
 		OrderID:   id.New(),
 		ProductID: id.New(),
 		Quantity:  2,
 		Price:     100,
 	}
-	addOn, _ := NewAddOn(item.ID, "Extra Cheese", 100, 2)
+	addOn, _ := OrderItemNewAddOn(item.ID, "Extra Cheese", 100, 2)
 	assert.NotNil(t, addOn)
 
-	orderItem, errs := NewItem(item.OrderID, item.ProductID, item.Quantity, item.Price, addOn)
+	orderItem, errs := OrderNewItem(item.OrderID, item.ProductID, item.Quantity, item.Price, addOn)
 
 	assert.Nil(t, errs)
 	assert.NotNil(t, orderItem)
@@ -59,35 +59,35 @@ func TestOrderItem_FailToCreate(t *testing.T) {
 	productID := id.New()
 
 	t.Run("should fail to create without OrderID", func(t *testing.T) {
-		orderItem, errs := NewItem(id.ID{}, productID, 2, 100)
+		orderItem, errs := OrderNewItem(id.ID{}, productID, 2, 100)
 
 		assert.NotNil(t, errs)
 		assert.Nil(t, orderItem)
 	})
 
 	t.Run("should fail to create without ProductID", func(t *testing.T) {
-		orderItem, errs := NewItem(orderID, id.ID{}, 2, 100)
+		orderItem, errs := OrderNewItem(orderID, id.ID{}, 2, 100)
 
 		assert.NotNil(t, errs)
 		assert.Nil(t, orderItem)
 	})
 
 	t.Run("should fail to create with zero Quantity", func(t *testing.T) {
-		orderItem, errs := NewItem(orderID, productID, 0, 100)
+		orderItem, errs := OrderNewItem(orderID, productID, 0, 100)
 
 		assert.NotNil(t, errs)
 		assert.Nil(t, orderItem)
 	})
 
 	t.Run("should fail to create with negative Quantity", func(t *testing.T) {
-		orderItem, errs := NewItem(orderID, productID, -1, 100)
+		orderItem, errs := OrderNewItem(orderID, productID, -1, 100)
 
 		assert.NotNil(t, errs)
 		assert.Nil(t, orderItem)
 	})
 
 	t.Run("should fail to create with negative Price", func(t *testing.T) {
-		orderItem, errs := NewItem(orderID, productID, 2, -100)
+		orderItem, errs := OrderNewItem(orderID, productID, 2, -100)
 
 		assert.NotNil(t, errs)
 		assert.Nil(t, orderItem)

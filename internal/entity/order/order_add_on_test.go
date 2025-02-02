@@ -13,7 +13,7 @@ func TestAddOn_New(t *testing.T) {
 	price := 200
 
 	t.Run("should create an add-on", func(t *testing.T) {
-		addOn, errs := NewAddOn(orderItemID, name, price, 1)
+		addOn, errs := OrderItemNewAddOn(orderItemID, name, price, 1)
 
 		assert.NotNil(t, addOn)
 		assert.Nil(t, errs)
@@ -24,7 +24,7 @@ func TestAddOn_New(t *testing.T) {
 	})
 
 	t.Run("should create an add-on with minimum price and quantity", func(t *testing.T) {
-		addOn, errs := NewAddOn(orderItemID, name, 0, 1)
+		addOn, errs := OrderItemNewAddOn(orderItemID, name, 0, 1)
 
 		assert.NotNil(t, addOn)
 		assert.Nil(t, errs)
@@ -38,42 +38,42 @@ func TestAddOn_New(t *testing.T) {
 func TestAddOn_FailToCreate(t *testing.T) {
 	orderItemID := id.New()
 	t.Run("should fail to create without OrderItemID", func(t *testing.T) {
-		addOn, errs := NewAddOn(id.ID{}, "Extra Cheese", 100, 1)
+		addOn, errs := OrderItemNewAddOn(id.ID{}, "Extra Cheese", 100, 1)
 
 		assert.Nil(t, addOn)
 		assert.NotNil(t, errs)
 	})
 
 	t.Run("should failt to create without name", func(t *testing.T) {
-		addOn, errs := NewAddOn(orderItemID, "", 100, 1)
+		addOn, errs := OrderItemNewAddOn(orderItemID, "", 100, 1)
 
 		assert.Nil(t, addOn)
 		assert.NotNil(t, errs)
 	})
 
 	t.Run("should failt to create with a short name", func(t *testing.T) {
-		addOn, errs := NewAddOn(orderItemID, "Ex", 100, 1)
+		addOn, errs := OrderItemNewAddOn(orderItemID, "Ex", 100, 1)
 
 		assert.Nil(t, addOn)
 		assert.NotNil(t, errs)
 	})
 
 	t.Run("should failt to create with a long name", func(t *testing.T) {
-		addOn, errs := NewAddOn(orderItemID, "This name is way too long for validation", 100, 1)
+		addOn, errs := OrderItemNewAddOn(orderItemID, "This name is way too long for validation", 100, 1)
 
 		assert.Nil(t, addOn)
 		assert.NotNil(t, errs)
 	})
 
 	t.Run("should failt to create with negative price", func(t *testing.T) {
-		addOn, errs := NewAddOn(orderItemID, "Ex", -100, 1)
+		addOn, errs := OrderItemNewAddOn(orderItemID, "Ex", -100, 1)
 
 		assert.Nil(t, addOn)
 		assert.NotNil(t, errs)
 	})
 
 	t.Run("should failt to create with negative invalid quantity", func(t *testing.T) {
-		addOn, errs := NewAddOn(orderItemID, "Ex", 100, 0)
+		addOn, errs := OrderItemNewAddOn(orderItemID, "Ex", 100, 0)
 
 		assert.Nil(t, addOn)
 		assert.NotNil(t, errs)
