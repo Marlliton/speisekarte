@@ -18,7 +18,7 @@ type Product struct {
 	Price       int
 	Available   bool
 	Note        string
-	AddOns      []*AddOn
+	AddOns      []id.ID
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	CategoryID  id.ID

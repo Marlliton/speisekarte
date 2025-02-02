@@ -1,4 +1,4 @@
-package product
+package addon
 
 import (
 	"time"
@@ -18,7 +18,7 @@ type AddOn struct {
 	UpdatedAt time.Time
 }
 
-func NewAddOn(productID id.ID, name string, price int) (*AddOn, []*fail.Error) {
+func New(productID id.ID, name string, price int) (*AddOn, []*fail.Error) {
 	addOn := &AddOn{
 		ID:        id.New(),
 		ProductID: productID,

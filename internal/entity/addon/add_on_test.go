@@ -1,4 +1,4 @@
-package product
+package addon
 
 import (
 	"testing"
@@ -13,7 +13,7 @@ func TestAddOn_New(t *testing.T) {
 	price := 100
 
 	t.Run("should create an add-on", func(t *testing.T) {
-		addOn, errs := NewAddOn(productID, name, price)
+		addOn, errs := New(productID, name, price)
 
 		assert.Nil(t, errs)
 		assert.NotNil(t, addOn)
@@ -23,7 +23,7 @@ func TestAddOn_New(t *testing.T) {
 	})
 
 	t.Run("should create an add-on with minimum price", func(t *testing.T) {
-		addOn, errs := NewAddOn(productID, name, 0)
+		addOn, errs := New(productID, name, 0)
 
 		assert.Nil(t, errs)
 		assert.NotNil(t, addOn)
@@ -37,35 +37,35 @@ func TestAddOn_FailToCreate(t *testing.T) {
 	productID := id.New()
 
 	t.Run("should fail to create without ProductID", func(t *testing.T) {
-		addOn, errs := NewAddOn(id.ID{}, "Extra Cheese", 100)
+		addOn, errs := New(id.ID{}, "Extra Cheese", 100)
 
 		assert.NotNil(t, errs)
 		assert.Nil(t, addOn)
 	})
 
 	t.Run("should fail to create without Name", func(t *testing.T) {
-		addOn, errs := NewAddOn(productID, "", 100)
+		addOn, errs := New(productID, "", 100)
 
 		assert.NotNil(t, errs)
 		assert.Nil(t, addOn)
 	})
 
 	t.Run("should fail to create with a short Name", func(t *testing.T) {
-		addOn, errs := NewAddOn(productID, "Ex", 100)
+		addOn, errs := New(productID, "Ex", 100)
 
 		assert.NotNil(t, errs)
 		assert.Nil(t, addOn)
 	})
 
 	t.Run("should fail to create with a long Name", func(t *testing.T) {
-		addOn, errs := NewAddOn(productID, "ThisNameIsWayTooLongForValidation", 100)
+		addOn, errs := New(productID, "ThisNameIsWayTooLongForValidation", 100)
 
 		assert.NotNil(t, errs)
 		assert.Nil(t, addOn)
 	})
 
 	t.Run("should fail to create with negative Price", func(t *testing.T) {
-		addOn, errs := NewAddOn(productID, "Extra Cheese", -10)
+		addOn, errs := New(productID, "Extra Cheese", -10)
 
 		assert.NotNil(t, errs)
 		assert.Nil(t, addOn)
