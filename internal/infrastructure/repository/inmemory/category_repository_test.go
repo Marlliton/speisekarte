@@ -43,7 +43,6 @@ func TestCategoryRepository(t *testing.T) {
 		repo.Save(ctx, cat2)
 
 		categories, err := repo.FindAll(ctx)
-		t.Log(categories)
 		assert.Nil(t, err)
 		assert.Len(t, categories, 2)
 	})
@@ -65,35 +64,29 @@ func TestCategoryRepository(t *testing.T) {
 		cat := &category.Category{ID: id.New(), Name: "Beverages"}
 		repo.Save(ctx, cat)
 
-		updateFields := map[string]interface{}{
-			"Name": "Hot Beverages",
-		}
-		err := repo.Update(ctx, cat.ID, updateFields)
+		updatedCat := &category.Category{ID: cat.ID, Name: "Hot Beverages"}
+		err := repo.Update(ctx, cat.ID, updatedCat)
 		assert.Nil(t, err)
 
-		updatedCat, err := repo.FindByID(ctx, cat.ID)
+		found, err := repo.FindByID(ctx, cat.ID)
 		assert.Nil(t, err)
-		assert.Equal(t, "Hot Beverages", updatedCat.Name)
+		assert.Equal(t, "Hot Beverages", found.Name)
 	})
 
 	t.Run("should return error when updating a non-existent category", func(t *testing.T) {
 		setup()
-		updateFields := map[string]interface{}{
-			"Name": "Non-existent",
-		}
-		err := repo.Update(ctx, id.New(), updateFields)
+		nonExistentID := id.New()
+		updatedCat := &category.Category{ID: nonExistentID, Name: "Non-existent"}
+		err := repo.Update(ctx, nonExistentID, updatedCat)
 		assert.NotNil(t, err)
 	})
 
-	t.Run("should return error when updating with invalid field", func(t *testing.T) {
+	t.Run("should return error when updating with nil category", func(t *testing.T) {
 		setup()
 		cat := &category.Category{ID: id.New(), Name: "Snacks"}
 		repo.Save(ctx, cat)
 
-		updateFields := map[string]interface{}{
-			"InvalidField": "Some value",
-		}
-		err := repo.Update(ctx, cat.ID, updateFields)
+		err := repo.Update(ctx, cat.ID, nil)
 		assert.NotNil(t, err)
 	})
 }

@@ -2,7 +2,7 @@ package inmemory
 
 import (
 	"context"
-	"reflect"
+	"fmt"
 	"sync"
 
 	"github.com/Marlliton/speisekarte/internal/entity/category"
@@ -62,27 +62,20 @@ func (r *CategoryRepository) Delete(ctx context.Context, id id.ID) *apperr.AppEr
 	return nil
 }
 
-func (r *CategoryRepository) Update(ctx context.Context, id id.ID, fields map[string]interface{}) *apperr.AppErr {
+func (r *CategoryRepository) Update(ctx context.Context, id id.ID, category *category.Category) *apperr.AppErr {
+	if category == nil {
+		return apperr.New("category cannot be nil")
+	}
+
 	r.Lock()
 	defer r.Unlock()
 
-	cat, exists := r.categories[id]
+	existingCategory, exists := r.categories[id]
 	if !exists {
-		return apperr.New("not found")
+		return apperr.New(fmt.Sprintf("category with ID %s not found", id))
 	}
 
-	catValue := reflect.ValueOf(cat).Elem()
-	for field, value := range fields {
-		fieldValue := catValue.FieldByName(field)
-		if !fieldValue.IsValid() {
-			return apperr.New("invalid field")
-		}
-		if !fieldValue.CanSet() {
-			return apperr.New("invalid field")
-		}
-
-		fieldValue.Set(reflect.ValueOf(value))
-	}
+	existingCategory.Name = category.Name
 
 	return nil
 }
