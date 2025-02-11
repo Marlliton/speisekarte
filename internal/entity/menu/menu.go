@@ -9,8 +9,6 @@ import (
 	"github.com/Marlliton/validator/rule"
 )
 
-// TODO: Adicionar comportamentos => AddCategory, RemoveCategory, GetCategories
-
 type Menu struct {
 	ID         id.ID
 	Name       string

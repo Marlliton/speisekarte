@@ -13,6 +13,6 @@ type MenuRepository interface {
 	FindByID(ctx context.Context, id id.ID) (*menu.Menu, *apperr.AppErr)
 	FindAll(ctx context.Context) ([]*menu.Menu, *apperr.AppErr)
 	Delete(ctx context.Context, id id.ID) *apperr.AppErr
-	Update(ctx context.Context, id id.ID, menu *menu.Menu) *apperr.AppErr
+	Update(ctx context.Context, id, menu *menu.Menu) *apperr.AppErr
 	GetCategoriesByMenuID(ctx context.Context, menuID id.ID) ([]*menu.Menu, *apperr.AppErr)
 }

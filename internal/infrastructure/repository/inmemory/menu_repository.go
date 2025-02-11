@@ -2,7 +2,6 @@ package inmemory
 
 import (
 	"context"
-	"reflect"
 	"sync"
 
 	"github.com/Marlliton/speisekarte/internal/entity/category"
@@ -65,30 +64,19 @@ func (r *MenuRepository) Delete(ctx context.Context, id id.ID) *apperr.AppErr {
 	return nil
 }
 
-func (r *MenuRepository) Update(ctx context.Context, id id.ID, fields map[string]interface{}) *apperr.AppErr {
+func (r *MenuRepository) Update(ctx context.Context, updatedMenu *menu.Menu) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 
-	cat, exists := r.menus[id]
+	menu, exists := r.menus[updatedMenu.ID]
 	if !exists {
 		return apperr.New("not found")
 	}
 
-	catValue := reflect.ValueOf(cat).Elem()
-	for field, value := range fields {
-		fieldValue := catValue.FieldByName(field)
-		if !fieldValue.IsValid() {
-			return apperr.New("invalid field")
-		}
-		if !fieldValue.CanSet() {
-			return apperr.New("invalid field")
-		}
-
-		fieldValue.Set(reflect.ValueOf(value))
-	}
-
+	menu.Name = updatedMenu.Name
 	return nil
 }
+
 func (r *MenuRepository) GetCategoriesByMenuID(ctx context.Context, menuID id.ID) ([]*category.Category, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
