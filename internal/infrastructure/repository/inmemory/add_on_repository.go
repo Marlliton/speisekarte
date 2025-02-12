@@ -18,7 +18,7 @@ func NewAddOnRepository() *addOnRepository {
 	return &addOnRepository{addOns: make(map[id.ID]*addon.AddOn)}
 }
 
-func (r *addOnRepository) Save(ctx context.Context, a *addon.AddOn) *apperr.AppErr {
+func (r *addOnRepository) Create(ctx context.Context, a *addon.AddOn) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 

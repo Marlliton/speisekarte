@@ -9,7 +9,7 @@ import (
 )
 
 type MenuRepository interface {
-	Save(ctx context.Context, menu *menu.Menu) *apperr.AppErr
+	Create(ctx context.Context, menu *menu.Menu) *apperr.AppErr
 	FindByID(ctx context.Context, id id.ID) (*menu.Menu, *apperr.AppErr)
 	FindAll(ctx context.Context) ([]*menu.Menu, *apperr.AppErr)
 	Delete(ctx context.Context, id id.ID) *apperr.AppErr

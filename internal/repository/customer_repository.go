@@ -9,6 +9,6 @@ import (
 )
 
 type CustomerRepository interface {
-	Save(ctx context.Context, customer *customer.Customer) *apperr.AppErr
+	Create(ctx context.Context, customer *customer.Customer) *apperr.AppErr
 	FindByID(ctx context.Context, id id.ID) (*customer.Customer, *apperr.AppErr)
 }

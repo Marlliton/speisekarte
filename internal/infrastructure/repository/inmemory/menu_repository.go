@@ -21,7 +21,7 @@ func NewMenuRepository(categoryRepo repository.CategoryRepository) *MenuReposito
 	return &MenuRepository{menus: map[id.ID]*menu.Menu{}, categoryRepo: categoryRepo}
 }
 
-func (r *MenuRepository) Save(ctx context.Context, menu *menu.Menu) *apperr.AppErr {
+func (r *MenuRepository) Create(ctx context.Context, menu *menu.Menu) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 

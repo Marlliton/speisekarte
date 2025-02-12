@@ -15,7 +15,7 @@ func TestAddOnRepository(t *testing.T) {
 
 	t.Run("should save and find an addon", func(t *testing.T) {
 		a := &addon.AddOn{ID: id.New(), Name: "Extra Cheese", Price: 200}
-		err := repo.Save(ctx, a)
+		err := repo.Create(ctx, a)
 		assert.Nil(t, err)
 
 		found, err := repo.FindByID(ctx, a.ID)
@@ -30,7 +30,7 @@ func TestAddOnRepository(t *testing.T) {
 
 	t.Run("should delete an addon", func(t *testing.T) {
 		a := &addon.AddOn{ID: id.New(), Name: "Bacon", Price: 150}
-		repo.Save(ctx, a)
+		repo.Create(ctx, a)
 
 		err := repo.Delete(ctx, a.ID)
 		assert.Nil(t, err)

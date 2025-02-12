@@ -20,7 +20,7 @@ func TestCustomerRepository(t *testing.T) {
 			Phone: "+5511999999999",
 		}
 
-		err := repo.Save(ctx, c)
+		err := repo.Create(ctx, c)
 		assert.Nil(t, err)
 
 		found, err := repo.FindByID(ctx, c.ID)

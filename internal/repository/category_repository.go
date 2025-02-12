@@ -9,7 +9,7 @@ import (
 )
 
 type CategoryRepository interface {
-	Save(ctx context.Context, category *category.Category) *apperr.AppErr
+	Create(ctx context.Context, category *category.Category) *apperr.AppErr
 	FindByID(ctx context.Context, id id.ID) (*category.Category, *apperr.AppErr)
 	FindAll(ctx context.Context) ([]*category.Category, *apperr.AppErr)
 	Delete(ctx context.Context, id id.ID) *apperr.AppErr

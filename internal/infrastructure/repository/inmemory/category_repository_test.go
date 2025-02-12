@@ -20,7 +20,7 @@ func TestCategoryRepository(t *testing.T) {
 	t.Run("should save and find a category", func(t *testing.T) {
 		setup()
 		cat := &category.Category{ID: id.New(), Name: "Drinks"}
-		err := repo.Save(ctx, cat)
+		err := repo.Create(ctx, cat)
 		assert.Nil(t, err)
 
 		found, err := repo.FindByID(ctx, cat.ID)
@@ -39,8 +39,8 @@ func TestCategoryRepository(t *testing.T) {
 		setup()
 		cat1 := &category.Category{ID: id.New(), Name: "Appetizers"}
 		cat2 := &category.Category{ID: id.New(), Name: "Main Course"}
-		repo.Save(ctx, cat1)
-		repo.Save(ctx, cat2)
+		repo.Create(ctx, cat1)
+		repo.Create(ctx, cat2)
 
 		categories, err := repo.FindAll(ctx)
 		assert.Nil(t, err)
@@ -50,7 +50,7 @@ func TestCategoryRepository(t *testing.T) {
 	t.Run("should delete a category", func(t *testing.T) {
 		setup()
 		cat := &category.Category{ID: id.New(), Name: "Desserts"}
-		repo.Save(ctx, cat)
+		repo.Create(ctx, cat)
 
 		err := repo.Delete(ctx, cat.ID)
 		assert.Nil(t, err)
@@ -62,7 +62,7 @@ func TestCategoryRepository(t *testing.T) {
 	t.Run("should update a category", func(t *testing.T) {
 		setup()
 		cat := &category.Category{ID: id.New(), Name: "Beverages"}
-		repo.Save(ctx, cat)
+		repo.Create(ctx, cat)
 
 		updatedCat := &category.Category{ID: cat.ID, Name: "Hot Beverages"}
 		err := repo.Update(ctx, cat.ID, updatedCat)
@@ -84,7 +84,7 @@ func TestCategoryRepository(t *testing.T) {
 	t.Run("should return error when updating with nil category", func(t *testing.T) {
 		setup()
 		cat := &category.Category{ID: id.New(), Name: "Snacks"}
-		repo.Save(ctx, cat)
+		repo.Create(ctx, cat)
 
 		err := repo.Update(ctx, cat.ID, nil)
 		assert.NotNil(t, err)

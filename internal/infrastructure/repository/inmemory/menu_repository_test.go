@@ -26,7 +26,7 @@ func TestMenuRepository(t *testing.T) {
 		assert.Empty(t, errs)
 		assert.NotNil(t, menu)
 
-		err := repo.Save(ctx, menu)
+		err := repo.Create(ctx, menu)
 		assert.Nil(t, err)
 
 		found, err := repo.FindByID(ctx, menu.ID)
@@ -49,8 +49,8 @@ func TestMenuRepository(t *testing.T) {
 		menu2, errs2 := menu.New("Dinner Menu")
 		assert.Empty(t, errs2)
 
-		repo.Save(ctx, menu1)
-		repo.Save(ctx, menu2)
+		repo.Create(ctx, menu1)
+		repo.Create(ctx, menu2)
 
 		menus, err := repo.FindAll(ctx)
 		assert.Nil(t, err)
@@ -62,7 +62,7 @@ func TestMenuRepository(t *testing.T) {
 		menu, errs := menu.New("Dessert Menu")
 		assert.Empty(t, errs)
 
-		repo.Save(ctx, menu)
+		repo.Create(ctx, menu)
 
 		err := repo.Delete(ctx, menu.ID)
 		assert.Nil(t, err)
@@ -77,7 +77,7 @@ func TestMenuRepository(t *testing.T) {
 		m, errs := menu.New("Brunch Menu")
 		assert.Empty(t, errs)
 
-		repo.Save(ctx, m)
+		repo.Create(ctx, m)
 
 		updatedMenu, errs := menu.New("Updated Brunch Menu")
 		assert.Empty(t, errs)
@@ -105,13 +105,13 @@ func TestMenuRepository(t *testing.T) {
 		setup()
 		cat1 := &category.Category{ID: id.New(), Name: "Appetizers"}
 		cat2 := &category.Category{ID: id.New(), Name: "Main Course"}
-		categoryRepo.Save(ctx, cat1)
-		categoryRepo.Save(ctx, cat2)
+		categoryRepo.Create(ctx, cat1)
+		categoryRepo.Create(ctx, cat2)
 
 		menu, errs := menu.New("Dinner Menu", cat1.ID, cat2.ID)
 		assert.Empty(t, errs)
 
-		repo.Save(ctx, menu)
+		repo.Create(ctx, menu)
 
 		categories, err := repo.GetCategoriesByMenuID(ctx, menu.ID)
 		assert.Nil(t, err)
@@ -126,7 +126,7 @@ func TestMenuRepository(t *testing.T) {
 		menu, errs := menu.New("Invalid Menu", nonExistentCatID)
 		assert.Empty(t, errs)
 
-		repo.Save(ctx, menu)
+		repo.Create(ctx, menu)
 
 		_, err := repo.GetCategoriesByMenuID(ctx, menu.ID)
 		assert.NotNil(t, err)

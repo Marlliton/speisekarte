@@ -20,7 +20,7 @@ func NewCustomerRepository() *customerRepository {
 	}
 }
 
-func (r *customerRepository) Save(ctx context.Context, customer *customer.Customer) *apperr.AppErr {
+func (r *customerRepository) Create(ctx context.Context, customer *customer.Customer) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 

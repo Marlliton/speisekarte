@@ -19,7 +19,7 @@ func NewCategoryRepository() *CategoryRepository {
 	return &CategoryRepository{categories: map[id.ID]*category.Category{}}
 }
 
-func (r *CategoryRepository) Save(ctx context.Context, category *category.Category) *apperr.AppErr {
+func (r *CategoryRepository) Create(ctx context.Context, category *category.Category) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 
