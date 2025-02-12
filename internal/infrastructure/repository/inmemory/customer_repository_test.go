@@ -10,7 +10,7 @@ import (
 )
 
 func TestCustomerRepository(t *testing.T) {
-	repo := NewCustomerRepository()
+	repo := NewInMemoryCustomerRepository()
 	ctx := context.Background()
 
 	t.Run("should save and find a customer", func(t *testing.T) {

@@ -11,13 +11,13 @@ import (
 )
 
 func TestMenuRepository(t *testing.T) {
-	var repo *MenuRepository
-	var categoryRepo *CategoryRepository
+	var repo *inMemoryMenuRepository
+	var categoryRepo *inMemoryCategoryRepository
 	ctx := context.Background()
 
 	setup := func() {
-		categoryRepo = NewCategoryRepository()
-		repo = NewMenuRepository(categoryRepo)
+		categoryRepo = NewInMemoryCategoryRepository()
+		repo = NewInMemoryMenuRepository(categoryRepo)
 	}
 
 	t.Run("should save and find a menu", func(t *testing.T) {

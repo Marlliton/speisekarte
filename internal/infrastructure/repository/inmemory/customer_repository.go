@@ -9,18 +9,18 @@ import (
 	"github.com/Marlliton/speisekarte/pkg/id"
 )
 
-type customerRepository struct {
+type inMemoryCustomerRepository struct {
 	sync.RWMutex
 	customers map[id.ID]*customer.Customer
 }
 
-func NewCustomerRepository() *customerRepository {
-	return &customerRepository{
+func NewInMemoryCustomerRepository() *inMemoryCustomerRepository {
+	return &inMemoryCustomerRepository{
 		customers: make(map[id.ID]*customer.Customer),
 	}
 }
 
-func (r *customerRepository) Create(ctx context.Context, customer *customer.Customer) *apperr.AppErr {
+func (r *inMemoryCustomerRepository) Create(ctx context.Context, customer *customer.Customer) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 
@@ -28,7 +28,7 @@ func (r *customerRepository) Create(ctx context.Context, customer *customer.Cust
 	return nil
 }
 
-func (r *customerRepository) FindByID(ctx context.Context, id id.ID) (*customer.Customer, *apperr.AppErr) {
+func (r *inMemoryCustomerRepository) FindByID(ctx context.Context, id id.ID) (*customer.Customer, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
 

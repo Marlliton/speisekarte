@@ -10,11 +10,11 @@ import (
 )
 
 func TestCategoryRepository(t *testing.T) {
-	var repo *CategoryRepository
+	var repo *inMemoryCategoryRepository
 	ctx := context.Background()
 
 	setup := func() {
-		repo = NewCategoryRepository()
+		repo = NewInMemoryCategoryRepository()
 	}
 
 	t.Run("should save and find a category", func(t *testing.T) {

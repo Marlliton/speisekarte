@@ -9,16 +9,16 @@ import (
 	"github.com/Marlliton/speisekarte/pkg/id"
 )
 
-type addOnRepository struct {
+type inMemoryAddOnRepository struct {
 	sync.RWMutex
 	addOns map[id.ID]*addon.AddOn
 }
 
-func NewAddOnRepository() *addOnRepository {
-	return &addOnRepository{addOns: make(map[id.ID]*addon.AddOn)}
+func NewInMemoryAddOnRepository() *inMemoryAddOnRepository {
+	return &inMemoryAddOnRepository{addOns: make(map[id.ID]*addon.AddOn)}
 }
 
-func (r *addOnRepository) Create(ctx context.Context, a *addon.AddOn) *apperr.AppErr {
+func (r *inMemoryAddOnRepository) Create(ctx context.Context, a *addon.AddOn) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 
@@ -26,7 +26,7 @@ func (r *addOnRepository) Create(ctx context.Context, a *addon.AddOn) *apperr.Ap
 	return nil
 }
 
-func (r *addOnRepository) FindByID(ctx context.Context, id id.ID) (*addon.AddOn, *apperr.AppErr) {
+func (r *inMemoryAddOnRepository) FindByID(ctx context.Context, id id.ID) (*addon.AddOn, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
 
@@ -37,7 +37,7 @@ func (r *addOnRepository) FindByID(ctx context.Context, id id.ID) (*addon.AddOn,
 	return r.addOns[id], nil
 }
 
-func (r *addOnRepository) FindAll(ctx context.Context) ([]*addon.AddOn, *apperr.AppErr) {
+func (r *inMemoryAddOnRepository) FindAll(ctx context.Context) ([]*addon.AddOn, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
 
@@ -49,7 +49,7 @@ func (r *addOnRepository) FindAll(ctx context.Context) ([]*addon.AddOn, *apperr.
 	return addons, nil
 }
 
-func (r *addOnRepository) Delete(ctx context.Context, id id.ID) *apperr.AppErr {
+func (r *inMemoryAddOnRepository) Delete(ctx context.Context, id id.ID) *apperr.AppErr {
 
 	r.RLock()
 	defer r.RUnlock()

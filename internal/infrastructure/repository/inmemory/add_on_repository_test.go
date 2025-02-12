@@ -10,7 +10,7 @@ import (
 )
 
 func TestAddOnRepository(t *testing.T) {
-	repo := NewAddOnRepository()
+	repo := NewInMemoryAddOnRepository()
 	ctx := context.Background()
 
 	t.Run("should save and find an addon", func(t *testing.T) {

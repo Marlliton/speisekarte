@@ -10,16 +10,16 @@ import (
 	"github.com/Marlliton/speisekarte/pkg/id"
 )
 
-type CategoryRepository struct {
+type inMemoryCategoryRepository struct {
 	sync.RWMutex
 	categories map[id.ID]*category.Category
 }
 
-func NewCategoryRepository() *CategoryRepository {
-	return &CategoryRepository{categories: map[id.ID]*category.Category{}}
+func NewInMemoryCategoryRepository() *inMemoryCategoryRepository {
+	return &inMemoryCategoryRepository{categories: map[id.ID]*category.Category{}}
 }
 
-func (r *CategoryRepository) Create(ctx context.Context, category *category.Category) *apperr.AppErr {
+func (r *inMemoryCategoryRepository) Create(ctx context.Context, category *category.Category) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 
@@ -27,7 +27,7 @@ func (r *CategoryRepository) Create(ctx context.Context, category *category.Cate
 	return nil
 }
 
-func (r *CategoryRepository) FindByID(ctx context.Context, id id.ID) (*category.Category, *apperr.AppErr) {
+func (r *inMemoryCategoryRepository) FindByID(ctx context.Context, id id.ID) (*category.Category, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
 
@@ -38,7 +38,7 @@ func (r *CategoryRepository) FindByID(ctx context.Context, id id.ID) (*category.
 	return r.categories[id], nil
 }
 
-func (r *CategoryRepository) FindAll(ctx context.Context) ([]*category.Category, *apperr.AppErr) {
+func (r *inMemoryCategoryRepository) FindAll(ctx context.Context) ([]*category.Category, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
 
@@ -50,7 +50,7 @@ func (r *CategoryRepository) FindAll(ctx context.Context) ([]*category.Category,
 	return categories, nil
 }
 
-func (r *CategoryRepository) Delete(ctx context.Context, id id.ID) *apperr.AppErr {
+func (r *inMemoryCategoryRepository) Delete(ctx context.Context, id id.ID) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 
@@ -62,7 +62,7 @@ func (r *CategoryRepository) Delete(ctx context.Context, id id.ID) *apperr.AppEr
 	return nil
 }
 
-func (r *CategoryRepository) Update(ctx context.Context, id id.ID, category *category.Category) *apperr.AppErr {
+func (r *inMemoryCategoryRepository) Update(ctx context.Context, id id.ID, category *category.Category) *apperr.AppErr {
 	if category == nil {
 		return apperr.New("category cannot be nil")
 	}

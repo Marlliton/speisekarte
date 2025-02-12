@@ -11,17 +11,17 @@ import (
 	"github.com/Marlliton/speisekarte/pkg/id"
 )
 
-type MenuRepository struct {
+type inMemoryMenuRepository struct {
 	sync.RWMutex
 	menus        map[id.ID]*menu.Menu
 	categoryRepo repository.CategoryRepository
 }
 
-func NewMenuRepository(categoryRepo repository.CategoryRepository) *MenuRepository {
-	return &MenuRepository{menus: map[id.ID]*menu.Menu{}, categoryRepo: categoryRepo}
+func NewInMemoryMenuRepository(categoryRepo repository.CategoryRepository) *inMemoryMenuRepository {
+	return &inMemoryMenuRepository{menus: map[id.ID]*menu.Menu{}, categoryRepo: categoryRepo}
 }
 
-func (r *MenuRepository) Create(ctx context.Context, menu *menu.Menu) *apperr.AppErr {
+func (r *inMemoryMenuRepository) Create(ctx context.Context, menu *menu.Menu) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 
@@ -29,7 +29,7 @@ func (r *MenuRepository) Create(ctx context.Context, menu *menu.Menu) *apperr.Ap
 	return nil
 }
 
-func (r *MenuRepository) FindByID(ctx context.Context, id id.ID) (*menu.Menu, *apperr.AppErr) {
+func (r *inMemoryMenuRepository) FindByID(ctx context.Context, id id.ID) (*menu.Menu, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
 
@@ -40,7 +40,7 @@ func (r *MenuRepository) FindByID(ctx context.Context, id id.ID) (*menu.Menu, *a
 	return r.menus[id], nil
 }
 
-func (r *MenuRepository) FindAll(ctx context.Context) ([]*menu.Menu, *apperr.AppErr) {
+func (r *inMemoryMenuRepository) FindAll(ctx context.Context) ([]*menu.Menu, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
 
@@ -52,7 +52,7 @@ func (r *MenuRepository) FindAll(ctx context.Context) ([]*menu.Menu, *apperr.App
 	return menus, nil
 }
 
-func (r *MenuRepository) Delete(ctx context.Context, id id.ID) *apperr.AppErr {
+func (r *inMemoryMenuRepository) Delete(ctx context.Context, id id.ID) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 
@@ -64,7 +64,7 @@ func (r *MenuRepository) Delete(ctx context.Context, id id.ID) *apperr.AppErr {
 	return nil
 }
 
-func (r *MenuRepository) Update(ctx context.Context, updatedMenu *menu.Menu) *apperr.AppErr {
+func (r *inMemoryMenuRepository) Update(ctx context.Context, updatedMenu *menu.Menu) *apperr.AppErr {
 	r.Lock()
 	defer r.Unlock()
 
@@ -77,7 +77,7 @@ func (r *MenuRepository) Update(ctx context.Context, updatedMenu *menu.Menu) *ap
 	return nil
 }
 
-func (r *MenuRepository) GetCategoriesByMenuID(ctx context.Context, menuID id.ID) ([]*category.Category, *apperr.AppErr) {
+func (r *inMemoryMenuRepository) GetCategoriesByMenuID(ctx context.Context, menuID id.ID) ([]*category.Category, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
 
