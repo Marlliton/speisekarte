@@ -21,8 +21,6 @@ type Cart struct {
 	Items      []*Item
 	Rate       int
 	Discount   int
-	Total      int
-	SubTotal   int
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
@@ -39,10 +37,6 @@ func New(customerID id.ID, rate, discount int, items ...*Item) (*Cart, []*fail.E
 		Items:      items,
 		CreatedAt:  time.Now(),
 	}
-	total := c.calculateTotal()
-	subTotal := c.calculateSubTotal()
-	c.Total = total
-	c.SubTotal = subTotal
 
 	if ok, errs := c.validate(); !ok {
 		return nil, errs
@@ -79,6 +73,14 @@ func (c *Cart) DisplayTotalPrice() priceDisplay {
 	return priceDisplay{total, subTotal}
 }
 
+func (c *Cart) GetTotal() int {
+	return c.calculateTotal()
+}
+
+func (c *Cart) GetSubTotal() int {
+	return c.calculateSubTotal()
+}
+
 func (c *Cart) AddItem(item *Item) {
 	for i, it := range c.Items {
 		if it.ProductID == item.ProductID {
@@ -97,6 +99,7 @@ func (c *Cart) RemoveItem(id id.ID) {
 		if it.ID == id {
 			c.Items = append(c.Items[:i], c.Items[i+1:]...)
 			c.UpdatedAt = time.Now()
+			return
 		}
 	}
 }

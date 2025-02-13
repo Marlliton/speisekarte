@@ -8,20 +8,20 @@ import (
 )
 
 type AddOn struct {
-	ID         id.ID
-	CartItemID id.ID
-	Name       string
-	Price      int
-	Quantity   int
+	ID       id.ID
+	ItemID   id.ID
+	Name     string
+	Price    int
+	Quantity int
 }
 
-func NewAddOn(cartItemID id.ID, name string, price, quantity int) (*AddOn, []*fail.Error) {
+func NewAddOn(itemID id.ID, name string, price, quantity int) (*AddOn, []*fail.Error) {
 	a := &AddOn{
-		ID:         id.New(),
-		CartItemID: cartItemID,
-		Name:       name,
-		Price:      price,
-		Quantity:   quantity,
+		ID:       id.New(),
+		ItemID:   itemID,
+		Name:     name,
+		Price:    price,
+		Quantity: quantity,
 	}
 
 	if ok, errs := a.validate(); !ok {
@@ -38,7 +38,7 @@ func (ad *AddOn) GetTotalPrice() int {
 func (a *AddOn) validate() (bool, []*fail.Error) {
 	v := validator.New()
 	v.Add("ID", rule.Rules{rule.Required()})
-	v.Add("CartItemID", rule.Rules{rule.Required()})
+	v.Add("ItemID", rule.Rules{rule.Required()})
 	v.Add("Name", rule.Rules{
 		rule.Required(),
 		rule.MinLength(3),

@@ -17,7 +17,7 @@ func TestAddOn_New(t *testing.T) {
 
 		assert.NotNil(t, addOn)
 		assert.Nil(t, errs)
-		assert.Equal(t, orderItemID, addOn.CartItemID)
+		assert.Equal(t, orderItemID, addOn.ItemID)
 		assert.Equal(t, name, addOn.Name)
 		assert.Equal(t, price, addOn.Price)
 		assert.Equal(t, 1, addOn.Quantity)
@@ -28,7 +28,7 @@ func TestAddOn_New(t *testing.T) {
 
 		assert.NotNil(t, addOn)
 		assert.Nil(t, errs)
-		assert.Equal(t, orderItemID, addOn.CartItemID)
+		assert.Equal(t, orderItemID, addOn.ItemID)
 		assert.Equal(t, name, addOn.Name)
 		assert.Equal(t, 0, addOn.Price)
 		assert.Equal(t, 1, addOn.Quantity)
@@ -53,7 +53,7 @@ func TestAddOn_GetTotalPrice(t *testing.T) {
 
 func TestAddOn_FailToCreate(t *testing.T) {
 	orderItemID := id.New()
-	t.Run("should fail to create without OrderItemID", func(t *testing.T) {
+	t.Run("should fail to create without itemID", func(t *testing.T) {
 		addOn, errs := NewAddOn(id.ID{}, "Extra Cheese", 100, 1)
 
 		assert.Nil(t, addOn)

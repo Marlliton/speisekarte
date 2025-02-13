@@ -52,7 +52,7 @@ func TestCart_Totals(t *testing.T) {
 		c := createCart(t, id.New(), rate, discount, it)
 
 		expectedTotalInCents := 3700
-		assert.Equal(t, expectedTotalInCents, c.Total)
+		assert.Equal(t, expectedTotalInCents, c.GetTotal())
 	})
 
 	t.Run("get the sub total cart", func(t *testing.T) {
@@ -60,7 +60,7 @@ func TestCart_Totals(t *testing.T) {
 		c := createCart(t, id.New(), rate, discount, it)
 
 		expectedTotalInCents := 4000
-		assert.Equal(t, expectedTotalInCents, c.SubTotal)
+		assert.Equal(t, expectedTotalInCents, c.GetSubTotal())
 	})
 
 	t.Run("get the display total and sub total", func(t *testing.T) {
