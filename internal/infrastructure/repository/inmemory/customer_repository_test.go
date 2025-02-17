@@ -23,7 +23,7 @@ func TestCustomerRepository(t *testing.T) {
 		err := repo.Create(ctx, c)
 		assert.Nil(t, err)
 
-		found, err := repo.FindByID(ctx, c.ID)
+		found, err := repo.FindByPhone(ctx, c.Phone)
 		assert.Nil(t, err)
 		assert.Equal(t, c.ID, found.ID)
 		assert.Equal(t, c.Name, found.Name)
@@ -31,7 +31,7 @@ func TestCustomerRepository(t *testing.T) {
 	})
 
 	t.Run("should return error when customer is not found", func(t *testing.T) {
-		_, err := repo.FindByID(ctx, id.New())
+		_, err := repo.FindByPhone(ctx, id.New().String())
 		assert.NotNil(t, err)
 		assert.Equal(t, "not found", err.Message)
 	})

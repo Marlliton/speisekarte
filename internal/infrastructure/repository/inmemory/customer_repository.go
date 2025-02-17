@@ -28,13 +28,15 @@ func (r *inMemoryCustomerRepository) Create(ctx context.Context, customer *custo
 	return nil
 }
 
-func (r *inMemoryCustomerRepository) FindByID(ctx context.Context, id id.ID) (*customer.Customer, *apperr.AppErr) {
+func (r *inMemoryCustomerRepository) FindByPhone(ctx context.Context, phone string) (*customer.Customer, *apperr.AppErr) {
 	r.RLock()
 	defer r.RUnlock()
 
-	if _, ok := r.customers[id]; !ok {
-		return nil, apperr.New("not found")
+	for _, c := range r.customers {
+		if c.Phone == phone {
+			return c, nil
+		}
 	}
 
-	return r.customers[id], nil
+	return nil, apperr.New("not found")
 }

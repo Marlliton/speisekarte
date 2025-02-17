@@ -2,8 +2,15 @@ package apperr
 
 import "fmt"
 
+const (
+	INVALID_INPUT = "INVALID_INPUT"
+	NOT_FOUND     = "NOT_FOUND"
+	DUPLICATED    = "DUPLICATED"
+	INTERNAL      = "INTERNAL"
+)
+
 type AppErr struct {
-	Code    *int
+	Code    string
 	Message string
 	Reasons []Reason
 }
@@ -20,8 +27,8 @@ func New(message string) *AppErr {
 	}
 }
 
-func (err *AppErr) WithCode(code int) *AppErr {
-	err.Code = &code
+func (err *AppErr) WithCode(code string) *AppErr {
+	err.Code = code
 
 	return err
 }
@@ -34,8 +41,8 @@ func (err *AppErr) WithReason(description, field string) *AppErr {
 
 func (err *AppErr) Error() string {
 	codeStr := ""
-	if err.Code != nil {
-		codeStr = fmt.Sprintf("code: %d", *err.Code)
+	if err.Code != "" {
+		codeStr = fmt.Sprintf("code: %s", err.Code)
 	}
 
 	if len(err.Reasons) == 0 {
@@ -62,7 +69,7 @@ func (err *AppErr) Error() string {
 
 func (err *AppErr) Is(target error) bool {
 	if target, ok := target.(*AppErr); ok {
-		if err.Code != nil {
+		if err.Code != "" {
 			return err.Code == target.Code && err.Message == target.Message
 		}
 		return err.Message == target.Message

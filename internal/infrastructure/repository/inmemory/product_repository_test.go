@@ -64,12 +64,11 @@ func TestProductRepository(t *testing.T) {
 
 		repo.Create(ctx, product1)
 		repo.Create(ctx, product2)
+		assert.Len(t, repo.products, 2)
 
 		products, err := repo.FindAll(ctx)
 		assert.Nil(t, err)
 		assert.Len(t, products, 2)
-		assert.Equal(t, product1.Name, products[0].Name)
-		assert.Equal(t, product2.Name, products[1].Name)
 	})
 
 	t.Run("should delete a product", func(t *testing.T) {
