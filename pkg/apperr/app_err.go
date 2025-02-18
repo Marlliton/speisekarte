@@ -60,7 +60,6 @@ func (err *AppErr) Error() string {
 	}
 
 	if codeStr != "" {
-
 		return fmt.Sprintf("%s, message: %s%s", codeStr, err.Message, reasons)
 	}
 

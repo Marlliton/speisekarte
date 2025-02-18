@@ -2,7 +2,6 @@ package customerusecase
 
 import (
 	"context"
-	"encoding/json"
 	"testing"
 
 	"github.com/Marlliton/speisekarte/internal/entity/customer"
@@ -68,8 +67,6 @@ func TestCustomerUseCase_Execute(t *testing.T) {
 		}
 
 		_, err := uc.Execute(ctx, input)
-		b, _ := json.MarshalIndent(err, "", "")
-		t.Logf("%s", b)
 		assert.NotNil(t, err)
 		assert.Equal(t, apperr.INVALID_INPUT, err.Code)
 	})
