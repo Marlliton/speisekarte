@@ -31,8 +31,19 @@ func New(repo repository.CustomerRepository) *customerUseCase {
 	return &customerUseCase{repo: repo}
 }
 
-func (uc *customerUseCase) Execute(ctx context.Context, input CustomerInput) (*customer.Customer, *apperr.AppErr) {
+func toCustomerOutput(c *customer.Customer) CustomerOutput {
+	return CustomerOutput{
+		ID:        c.ID,
+		Name:      c.Name,
+		Phone:     c.Phone,
+		CreatedAt: c.CreatedAt,
+		UpdatedAt: c.UpdatedAt,
+	}
+}
+
+func (uc *customerUseCase) Execute(ctx context.Context, input CustomerInput) (CustomerOutput, *apperr.AppErr) {
 	c, errs := customer.New(input.Name, input.Phone)
+	emptyOutput := CustomerOutput{}
 
 	if len(errs) > 0 {
 		appErr := apperr.New("Invalid input").WithCode(apperr.INVALID_INPUT)
@@ -40,20 +51,20 @@ func (uc *customerUseCase) Execute(ctx context.Context, input CustomerInput) (*c
 			appErr.WithReason(err.Message, err.Field)
 		}
 
-		return nil, appErr
+		return emptyOutput, appErr
 	}
 
 	existingCustomer, err := uc.repo.FindByPhone(ctx, c.Phone)
 	if err != nil {
-		return nil, apperr.New("Failed to check customer existence").WithCode(apperr.INTERNAL)
+		return emptyOutput, apperr.New("Failed to check customer existence").WithCode(apperr.INTERNAL)
 	}
 	if existingCustomer != nil {
-		return nil, apperr.New("Customer already exists").WithCode(apperr.DUPLICATED)
+		return emptyOutput, apperr.New("Customer already exists").WithCode(apperr.DUPLICATED)
 	}
 
 	if err := uc.repo.Create(ctx, c); err != nil {
-		return nil, apperr.New("failed to create customer").WithCode(apperr.INTERNAL)
+		return emptyOutput, apperr.New("failed to create customer").WithCode(apperr.INTERNAL)
 	}
 
-	return c, nil
+	return toCustomerOutput(c), nil
 }

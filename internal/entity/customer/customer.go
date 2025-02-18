@@ -23,6 +23,7 @@ func New(name, phone string) (*Customer, []*fail.Error) {
 		Name:      name,
 		Phone:     phone,
 		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
 	if ok, errs := c.validate(); !ok {

@@ -38,5 +38,5 @@ func (r *inMemoryCustomerRepository) FindByPhone(ctx context.Context, phone stri
 		}
 	}
 
-	return nil, apperr.New("not found")
+	return nil, nil
 }
