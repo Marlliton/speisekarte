@@ -46,7 +46,7 @@ func (uc *customerUseCase) Execute(ctx context.Context, input CustomerInput) (Cu
 	emptyOutput := CustomerOutput{}
 
 	if len(errs) > 0 {
-		appErr := apperr.New("Invalid input").WithCode(apperr.INVALID_INPUT)
+		appErr := apperr.New("invalid input").WithCode(apperr.INVALID_INPUT)
 		for _, err := range errs {
 			appErr.WithReason(err.Message, err.Field)
 		}
@@ -56,10 +56,10 @@ func (uc *customerUseCase) Execute(ctx context.Context, input CustomerInput) (Cu
 
 	existingCustomer, err := uc.repo.FindByPhone(ctx, c.Phone)
 	if err != nil {
-		return emptyOutput, apperr.New("Failed to check customer existence").WithCode(apperr.INTERNAL)
+		return emptyOutput, apperr.New("failed to check customer existence").WithCode(apperr.INTERNAL)
 	}
 	if existingCustomer != nil {
-		return emptyOutput, apperr.New("Customer already exists").WithCode(apperr.DUPLICATED)
+		return emptyOutput, apperr.New("customer already exists").WithCode(apperr.DUPLICATED)
 	}
 
 	if err := uc.repo.Create(ctx, c); err != nil {
