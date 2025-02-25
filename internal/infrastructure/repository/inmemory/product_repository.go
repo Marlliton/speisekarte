@@ -32,7 +32,7 @@ func (r *inMemoryProductRepository) FindByID(ctx context.Context, id id.ID) (*pr
 	defer r.RUnlock()
 
 	if _, exists := r.products[id]; !exists {
-		return nil, apperr.New("not found")
+		return nil, apperr.New("not found").WithCode(apperr.NOT_FOUND)
 	}
 
 	return r.products[id], nil

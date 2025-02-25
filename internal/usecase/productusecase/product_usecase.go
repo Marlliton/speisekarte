@@ -77,12 +77,11 @@ func (uc *productUseCase) Create(ctx context.Context, input ProductInput) (Produ
 func (uc *productUseCase) FindByID(ctx context.Context, id id.ID) (ProductOutput, *apperr.AppErr) {
 	prod, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
+		if err.Code == apperr.NOT_FOUND {
+			return ProductOutput{}, apperr.New("product not found").WithCode(apperr.NOT_FOUND)
+		}
 		msg := fmt.Sprintf("failed to find product by id: %s", err.Error())
 		return ProductOutput{}, apperr.New(msg).WithCode(apperr.INTERNAL)
-	}
-
-	if prod == nil {
-		return ProductOutput{}, apperr.New("product not found").WithCode(apperr.NOT_FOUND)
 	}
 
 	return toProductOutput(prod), nil
@@ -95,7 +94,7 @@ func (uc *productUseCase) FindAll(ctx context.Context) ([]ProductOutput, *apperr
 		return nil, apperr.New(msg).WithCode(apperr.INTERNAL)
 	}
 
-	output := make([]ProductOutput, 0, len(result))
+	output := make([]ProductOutput, len(result))
 
 	for i, p := range result {
 		output[i] = toProductOutput(p)
