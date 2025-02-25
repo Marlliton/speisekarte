@@ -17,11 +17,10 @@ type Product struct {
 	ImageURL    string
 	Price       int
 	Available   bool
-	Note        string
-	AddOns      []id.ID
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	CategoryID  id.ID
+	// AddOns      []id.ID
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	CategoryID id.ID
 }
 
 func New(
@@ -34,11 +33,12 @@ func New(
 		ImageURL:    imageURL,
 		Price:       price,
 		Available:   available,
-		CreatedAt:   time.Now(),
 		CategoryID:  categoryID,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 
-	ok, errs := p.validate()
+	ok, errs := p.Validate()
 	if !ok {
 		return nil, errs
 	}
@@ -50,7 +50,7 @@ func (p *Product) DisplayPrice() string {
 	return fmt.Sprintf("%.2f", float64(p.Price)/100)
 }
 
-func (p *Product) validate() (bool, []*fail.Error) {
+func (p *Product) Validate() (bool, []*fail.Error) {
 	v := validator.New()
 	v.Add("ID", rule.Rules{rule.Required()})
 	v.Add("Name", rule.Rules{
