@@ -148,5 +148,8 @@ func (uc *productUseCase) Update(ctx context.Context, id id.ID, input ProductInp
 		return apperr.New(msg).WithCode(apperr.INTERNAL)
 	}
 
+	a, _ := uc.repo.FindByID(ctx, existingProd.ID)
+	fmt.Println("aaaaaaaaaaaaaaaaa", a)
+
 	return nil
 }

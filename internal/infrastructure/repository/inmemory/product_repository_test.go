@@ -54,7 +54,7 @@ func TestProductRepository(t *testing.T) {
 
 		_, err := repo.FindByID(ctx, nonExistentID)
 		assert.NotNil(t, err)
-		assert.Equal(t, "message: not found", err.Error())
+		assert.Equal(t, "code: NOT_FOUND, message: not found", err.Error())
 	})
 
 	t.Run("should find all products", func(t *testing.T) {
@@ -85,7 +85,7 @@ func TestProductRepository(t *testing.T) {
 
 		_, err = repo.FindByID(ctx, product.ID)
 		assert.NotNil(t, err)
-		assert.Equal(t, "message: not found", err.Error())
+		assert.Equal(t, "code: NOT_FOUND, message: not found", err.Error())
 	})
 
 	t.Run("should return error when deleting a non-existent product", func(t *testing.T) {

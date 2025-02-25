@@ -70,12 +70,12 @@ func (r *inMemoryProductRepository) Update(ctx context.Context, id id.ID, produc
 	r.Lock()
 	defer r.Unlock()
 
-	existingProduct, exists := r.products[id]
+	_, exists := r.products[id]
 	if !exists {
 		return apperr.New(fmt.Sprintf("product with ID %s not found", id))
 	}
 
-	existingProduct.Name = product.Name
+	r.products[id] = product
 
 	return nil
 }

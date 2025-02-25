@@ -149,17 +149,8 @@ func TestUpdate(t *testing.T) {
 	uc, repo := setupTest()
 	ctx := context.Background()
 
-	prod := &product.Product{
-		ID:          id.New(),
-		Name:        "Old Name",
-		Description: "Old Description",
-		ImageURL:    "http://example.com/old.jpg",
-		Price:       500,
-		Available:   false,
-		CategoryID:  id.New(),
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}
+	prod, errs := product.New("Old name", "Old Description", "http://example.com/old.png", 500, false, id.New())
+	assert.Nil(t, errs)
 	repo.Create(ctx, prod)
 
 	t.Run("Update existing product", func(t *testing.T) {
@@ -173,7 +164,7 @@ func TestUpdate(t *testing.T) {
 		}
 
 		err := uc.Update(ctx, prod.ID, input)
-		assert.NoError(t, err)
+		assert.Nil(t, err)
 
 		updatedProd, err := repo.FindByID(ctx, prod.ID)
 		assert.Nil(t, err)
