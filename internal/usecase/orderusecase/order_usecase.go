@@ -54,7 +54,7 @@ func New(repo repository.OrderRepository) *orderUseCase {
 
 func (uc *orderUseCase) Create(ctx context.Context, input OrderInput) *apperr.AppErr {
 	orderID := id.New()
-	items := make([]*order.OrderItem, 0, len(input.Items))
+	items := make([]*order.Item, 0, len(input.Items))
 	inputErrs := apperr.New("invalid-input").WithCode(apperr.INVALID_INPUT)
 
 	for _, it := range input.Items {
@@ -73,7 +73,7 @@ func (uc *orderUseCase) Create(ctx context.Context, input OrderInput) *apperr.Ap
 			addons = append(addons, addon)
 		}
 
-		item, errs := order.OrderNewItem(itemID, orderID, it.ProductID, it.Quantity, it.Price, addons...)
+		item, errs := order.NewItem(itemID, orderID, it.ProductID, it.Quantity, it.Price, addons...)
 		if len(errs) > 0 {
 			for _, err := range errs {
 				inputErrs.WithReason(err.Message, err.Field)
