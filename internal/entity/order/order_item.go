@@ -11,18 +11,19 @@ type OrderItem struct {
 	ID        id.ID
 	OrderID   id.ID
 	ProductID id.ID
-	AddOns    []*OrderItemAddOn
+	AddOns    []*AddOn
 	Quantity  int
 	Price     int
 }
 
 func OrderNewItem(
-	orderID, productID id.ID, quantity, price int, addOns ...*OrderItemAddOn,
+	id, orderID, productID id.ID, quantity, price int, addOns ...*AddOn,
 ) (*OrderItem, []*fail.Error) {
 	if len(addOns) == 0 {
-		addOns = make([]*OrderItemAddOn, 0)
+		addOns = make([]*AddOn, 0)
 	}
-	o := &OrderItem{ID: id.New(),
+	o := &OrderItem{
+		ID:        id,
 		OrderID:   orderID,
 		ProductID: productID,
 		AddOns:    addOns,
@@ -39,6 +40,7 @@ func OrderNewItem(
 
 func (o *OrderItem) validate() (bool, []*fail.Error) {
 	v := validator.New()
+	v.Add("ID", rule.Rules{rule.Required()})
 	v.Add("OrderID", rule.Rules{rule.Required()})
 	v.Add("ProductID", rule.Rules{rule.Required()})
 	v.Add("Quantity", rule.Rules{rule.Required(), rule.MinValue(1)})

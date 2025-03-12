@@ -12,6 +12,7 @@ func TestNewOrder_Success(t *testing.T) {
 	items := []*OrderItem{
 		{
 			ID:        id.New(),
+			OrderID:   id.New(),
 			ProductID: id.New(),
 			Quantity:  2,
 			Price:     1000,
@@ -19,7 +20,7 @@ func TestNewOrder_Success(t *testing.T) {
 	}
 
 	t.Run("should create an order", func(t *testing.T) {
-		order, errs := New(customerID, items...)
+		order, errs := New(id.New(), customerID, items...)
 
 		assert.Nil(t, errs)
 		assert.NotNil(t, order)
@@ -27,13 +28,13 @@ func TestNewOrder_Success(t *testing.T) {
 		assert.Equal(t, Pending, order.Status)
 		assert.Len(t, order.Items, 1)
 	})
-
 }
 
 func TestNewOrder_FailToCreate(t *testing.T) {
-	t.Run("should fail to create whitout id", func(t *testing.T) {
-		order, errs := New(id.ID{}, &OrderItem{
+	t.Run("should fail to create without customer id", func(t *testing.T) {
+		order, errs := New(id.New(), id.ID{}, &OrderItem{
 			ID:        id.New(),
+			OrderID:   id.New(),
 			ProductID: id.New(),
 			Quantity:  1,
 			Price:     1000,
@@ -43,8 +44,8 @@ func TestNewOrder_FailToCreate(t *testing.T) {
 		assert.NotNil(t, errs)
 	})
 
-	t.Run("should to create whitout order item", func(t *testing.T) {
-		order, errs := New(id.New())
+	t.Run("should fail to create without order items", func(t *testing.T) {
+		order, errs := New(id.New(), id.New())
 
 		assert.Nil(t, order)
 		assert.NotNil(t, errs)

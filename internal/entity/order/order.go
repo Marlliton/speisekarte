@@ -28,13 +28,14 @@ type Order struct {
 	UpdatedAt  time.Time
 }
 
-func New(customerID id.ID, items ...*OrderItem) (*Order, []*fail.Error) {
+func New(id, customerID id.ID, items ...*OrderItem) (*Order, []*fail.Error) {
 	o := &Order{
-		ID:         id.New(),
+		ID:         id,
 		CustomerID: customerID,
 		Items:      items,
 		Status:     Pending,
 		CreatedAt:  time.Now(),
+		UpdatedAt:  time.Now(),
 	}
 
 	if ok, errs := o.validate(); !ok {
