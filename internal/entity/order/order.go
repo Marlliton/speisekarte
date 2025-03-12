@@ -9,26 +9,26 @@ import (
 	"github.com/Marlliton/validator/rule"
 )
 
-type OrderStatus string
+type Status string
 
 const (
-	Pending   OrderStatus = "Pending"
-	Confirmed OrderStatus = "Confirmed"
-	Delivered OrderStatus = "Delivered"
-	Canceled  OrderStatus = "Canceled"
+	Pending   Status = "Pending"
+	Confirmed Status = "Confirmed"
+	Delivered Status = "Delivered"
+	Canceled  Status = "Canceled"
 )
 
 type Order struct {
 	ID         id.ID
 	CustomerID id.ID
-	Items      []*OrderItem
-	Status     OrderStatus
+	Items      []*Item
+	Status     Status
 	Total      int
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
 
-func New(id, customerID id.ID, items ...*OrderItem) (*Order, []*fail.Error) {
+func New(id, customerID id.ID, items ...*Item) (*Order, []*fail.Error) {
 	o := &Order{
 		ID:         id,
 		CustomerID: customerID,

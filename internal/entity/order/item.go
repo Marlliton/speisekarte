@@ -7,7 +7,7 @@ import (
 	"github.com/Marlliton/validator/rule"
 )
 
-type OrderItem struct {
+type Item struct {
 	ID        id.ID
 	OrderID   id.ID
 	ProductID id.ID
@@ -16,13 +16,13 @@ type OrderItem struct {
 	Price     int
 }
 
-func OrderNewItem(
+func NewItem(
 	id, orderID, productID id.ID, quantity, price int, addOns ...*AddOn,
-) (*OrderItem, []*fail.Error) {
+) (*Item, []*fail.Error) {
 	if len(addOns) == 0 {
 		addOns = make([]*AddOn, 0)
 	}
-	o := &OrderItem{
+	o := &Item{
 		ID:        id,
 		OrderID:   orderID,
 		ProductID: productID,
@@ -38,7 +38,7 @@ func OrderNewItem(
 	return o, nil
 }
 
-func (o *OrderItem) validate() (bool, []*fail.Error) {
+func (o *Item) validate() (bool, []*fail.Error) {
 	v := validator.New()
 	v.Add("ID", rule.Rules{rule.Required()})
 	v.Add("OrderID", rule.Rules{rule.Required()})
